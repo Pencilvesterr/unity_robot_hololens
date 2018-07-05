@@ -47,7 +47,7 @@ namespace ROSBridgeLib {
 
 			public override string ToYAMLString() {
 				return "{\"data\" : {\"secs\" : " + _secs + ", \"nsecs\" : " + _nsecs + "}}";
-			}
-		}
+            }
+        }
 	}
 }

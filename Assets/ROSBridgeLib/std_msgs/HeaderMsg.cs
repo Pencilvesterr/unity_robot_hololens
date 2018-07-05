@@ -60,7 +60,7 @@ namespace ROSBridgeLib {
 
             public override string ToYAMLString()
             {
-                return "{\"seq\" : " + _seq + ", \"stamp\" : " + _stamp.ToYAMLString() + ", frame_id=" + _frame_id + "}";
+                return "{\"seq\" : " + _seq + ", \"stamp\" : " + _stamp.ToYAMLString() + ", frame_id : \"" + _frame_id + "\"}";
             }
         }
     }

@@ -5,6 +5,7 @@ using UnityEngine.Windows.Speech;
 using UnityEngine.UI;
 using ROSBridgeLib.geometry_msgs;
 using ROSBridgeLib;
+using ROSBridgeLib.std_msgs;
 using ROSBridgeLib.wam_common;
 
 public class SpeechManager : MonoBehaviour
@@ -12,12 +13,16 @@ public class SpeechManager : MonoBehaviour
     KeywordRecognizer keywordRecognizer = null;
     Dictionary<string, System.Action> keywords = new Dictionary<string, System.Action>();
     public Transform path_sphere;
+    public Transform barrier;
     public Transform normal_arrow;
     public Transform profile_sphere;
     private LineRenderer lineConnecting;
     public List<Vector3> path_points;
     public List<Vector3> path_points_global;
     public List<Vector3> path_normals;
+    public List<Vector3> barrier_points;
+    public List<Vector3> barrier_points_global;
+    public List<Vector3> barrier_normals;
     public Text set_point_list_text;
     public Transform WAM_t;//CP 
     public Vector3 point_wrt_WAM;
@@ -26,7 +31,7 @@ public class SpeechManager : MonoBehaviour
     private const float start_force_line = 0.3f;
     private const float start_force_sin = 0.3f; //force=15N-->0.3m, force=10-->0.2m
     private const float sin_amplitude = 0.2f;//force 10N-->0.2m
-
+    private ROSBridgeWebSocketConnection ros = null; //defined in ROSBridgeWebSocketConnection
     // public GameObject path_clone;
     //public GameObject path_sphere3;
     //private Transform normal_clone;
@@ -38,6 +43,9 @@ public class SpeechManager : MonoBehaviour
         path_points = new List<Vector3>();
         path_normals = new List<Vector3>();
         path_points_global = new List<Vector3>();
+        barrier_points = new List<Vector3>();
+        barrier_normals = new List<Vector3>();
+        barrier_points_global = new List<Vector3>();
         path_point_counter = 0;
         lineConnecting = gameObject.AddComponent<LineRenderer>();
         lineConnecting.widthMultiplier = 0.01f;
@@ -47,8 +55,15 @@ public class SpeechManager : MonoBehaviour
         lineConnecting.enabled = false;
 
         //lineConnecting.SetPositions();
+        //ros = new ROSBridgeWebSocketConnection("ws://192.168.0.102", 9090); //change to IP of ROS machine  
 
-
+        /*add subscribers and publishers
+        ros.AddSubscriber(typeof(WAMJointState)); //the joint state of the WAM
+        ros.AddPublisher(typeof(WAMRTJointPos)); //used with sliders to send posiiton to the WAM
+        ros.AddPublisher(typeof(CameraPosePublish)); //publish hololens pose relative to robot base
+        ros.AddServiceResponse(typeof(WAMServiceResponse)); //the service call response
+        ros.AddServiceResponse(typeof(myoBandFeedback)); //the myo band feedback response
+        */
         keywords.Add("Go Home", () =>
         {
             float[] home = { 0.0F, 0.0F, 0.0F, 1.57F, 0.0F, 0F, 0.0F };
@@ -168,7 +183,7 @@ public class SpeechManager : MonoBehaviour
             Vector3 temp_location;
 
             Vector3[] temp_global_points=new Vector3[path_points_global.Count];
-            lineConnecting.numPositions = path_points_global.Count;
+            lineConnecting.positionCount = path_points_global.Count;
             lineConnecting.enabled = true;
             for (int i = 0; i < path_points_global.Count; i++)
             {
@@ -195,7 +210,7 @@ public class SpeechManager : MonoBehaviour
             Vector3 temp_location;
 
             Vector3[] temp_global_points = new Vector3[path_points_global.Count];
-            lineConnecting.numPositions = path_points_global.Count;
+            lineConnecting.positionCount = path_points_global.Count;
             lineConnecting.enabled = true;
             for (int i = 0; i < path_points_global.Count; i++)
             {
@@ -225,7 +240,7 @@ public class SpeechManager : MonoBehaviour
             float A = 0.0f;
             float B = 0.0f;
             Vector3[] temp_global_points = new Vector3[path_points_global.Count];
-            lineConnecting.numPositions = path_points_global.Count;
+            lineConnecting.positionCount = path_points_global.Count;
             lineConnecting.enabled = true;
 
             B = path_points_global[path_points_global.Count - 1].x - path_points_global[0].x;
@@ -272,7 +287,7 @@ public class SpeechManager : MonoBehaviour
             float sin_height = 0.0f;
             float calculate_value = 0.0f;
             Vector3[] temp_global_points = new Vector3[path_points_global.Count];
-            lineConnecting.numPositions = path_points_global.Count;
+            lineConnecting.positionCount = path_points_global.Count;
             lineConnecting.enabled = true;
             for (int i = 0; i < path_points_global.Count; i++)
             {
@@ -295,6 +310,17 @@ public class SpeechManager : MonoBehaviour
                 // lineConnecting.SetPosition(i,temp_location);
             }
             lineConnecting.SetPositions(temp_global_points);
+
+        });
+
+        keywords.Add("Recalibrate", () =>
+        {
+            //When we call "Recalibrate", we want the WAM Robot to recalibrate to the moved marker. 
+            //First, we set the recalibrate variable to true, indicating that we need to recalibrate the WAM robot. recalibrate variable is inside DefaultTrackableEventHandler.cs
+            GameObject.Find("ImageTarget").GetComponent<DefaultTrackableEventHandler>().recalibrate=true;
+            //The next line activates all datasets that have been deactivated. reActivate function is inside DefaultTrackableEventHandler.cs
+            GameObject.Find("ImageTarget").GetComponent<DefaultTrackableEventHandler>().reActivate();
+            Debug.Log("called recalibrate");
 
         });
 
@@ -339,9 +365,9 @@ public class SpeechManager : MonoBehaviour
 
         keywords.Add("Lock Path", () =>
         {
-
-
-
+            byte data = 1;
+            UInt8Msg msg = new UInt8Msg (data);
+            GameObject.Find("WAM").GetComponent<WAMViewer>().myoBandFeedbackVibrate(msg);
             GameObject.Find("WAM").GetComponent<WAMViewer>().lock_path(path_points,path_normals, path_points.Count);
 
         });
@@ -357,23 +383,23 @@ public class SpeechManager : MonoBehaviour
             GameObject.Find("WAM").transform.position -= Vector3.up * 0.01F;
             });
 
-        keywords.Add("Move Left", () =>
+        keywords.Add("Move Right", () =>
         {
             GameObject.Find("WAM").transform.position += Vector3.right * 0.01F;
             });
 
-        keywords.Add("Move Right", () =>
+        keywords.Add("Move Left", () =>
         {
             GameObject.Find("WAM").transform.position -= Vector3.right * 0.01F;
         });
 
 
-        keywords.Add("Move Back", () =>
+        keywords.Add("Move Forward", () =>
         {
             GameObject.Find("WAM").transform.position -= Vector3.forward * 0.01F;
         });
 
-        keywords.Add("Move Forward", () =>
+        keywords.Add("Move Backward", () =>
         {
             GameObject.Find("WAM").transform.position += Vector3.forward * 0.01F;
         });
@@ -395,9 +421,11 @@ public class SpeechManager : MonoBehaviour
             WAM_t = GameObject.Find("WAM").transform;//CP
             //path_clone=Instantiate(path_sphere, GazeGestureManager.Instance.hit_point, Quaternion.identity);
             path_sphere.tag = "clone";
-            Instantiate(path_sphere, GazeGestureManager.Instance.hit_point, Quaternion.identity);
+            var child = Instantiate(path_sphere, GazeGestureManager.Instance.hit_point, Quaternion.identity);
+            child.transform.parent = GameObject.Find("ImageTarget").transform;
             normal_arrow.tag = "clone";
-            Instantiate(normal_arrow, GazeGestureManager.Instance.hit_point, Quaternion.FromToRotation(Vector3.forward, GazeGestureManager.Instance.hit_normal));
+            var arrow = Instantiate(normal_arrow, GazeGestureManager.Instance.hit_point, Quaternion.FromToRotation(Vector3.forward, GazeGestureManager.Instance.hit_normal));
+            arrow.transform.parent = GameObject.Find("ImageTarget").transform;
             //Vector3 relative_point_local=transform.InverseTransformPoint(GazeGestureManager.Instance.hit_point);  //CP: This should put the point in the local frame
             //Vector3 relative_point_global = transform.TransformPoint(GazeGestureManager.Instance.hit_point);  //CP: This should put the point in the world frame which is align with the robot frame
             //Vector3 relative_normal_global= transform.T
@@ -417,6 +445,34 @@ public class SpeechManager : MonoBehaviour
             set_point_list_text.text +=  GazeGestureManager.Instance.hit_point.ToString("R") + ", (-y,z,x),value wrt wam->"+ point_wrt_WAM.ToString("R");//CP
 
     */
+        });
+
+
+        keywords.Add("Barrier", () =>
+        {
+            Debug.Log("Called Barrier");
+            WAM_t = GameObject.Find("WAM").transform;
+            barrier.tag = "barrier";
+            var child = Instantiate(barrier, GazeGestureManager.Instance.hit_point, Quaternion.identity);
+            child.transform.parent = GameObject.Find("ImageTarget").transform;
+            /*
+            point_wrt_WAM = WAM_t.InverseTransformPoint(GazeGestureManager.Instance.hit_point);
+            point_wrt_WAM = point_wrt_WAM * 0.001F;
+            point_wrt_WAM.y = point_wrt_WAM.y - 0.354F;
+            barrier_points.Add(point_wrt_WAM);
+            barrier_points_global.Add(GazeGestureManager.Instance.hit_point);
+            barrier_normals.Add(GazeGestureManager.Instance.hit_normal);
+            */
+
+
+        });
+
+        keywords.Add("Bigger", () =>
+        {
+
+            GameObject.Find("Barrier").transform.localScale += Vector3.right * 1.5F;
+            
+
         });
 
 
@@ -449,3 +505,4 @@ public class SpeechManager : MonoBehaviour
         }
     }
 }
+ 
