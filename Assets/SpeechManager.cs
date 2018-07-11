@@ -448,7 +448,7 @@ public class SpeechManager : MonoBehaviour
         });
 
 
-        keywords.Add("Barrier", () =>
+        keywords.Add("barrier", () =>
         {
             Debug.Log("Called Barrier");
             WAM_t = GameObject.Find("WAM").transform;
@@ -463,6 +463,15 @@ public class SpeechManager : MonoBehaviour
             barrier_points_global.Add(GazeGestureManager.Instance.hit_point);
             barrier_normals.Add(GazeGestureManager.Instance.hit_normal);
             */
+
+            point_wrt_WAM = WAM_t.InverseTransformPoint(GazeGestureManager.Instance.hit_point);
+            point_wrt_WAM = point_wrt_WAM * 0.001F;
+            point_wrt_WAM.y = point_wrt_WAM.y - 0.354F;
+
+            path_points.Add(point_wrt_WAM);
+            path_points_global.Add(GazeGestureManager.Instance.hit_point);
+            //path_points.Add(GazeGestureManager.Instance.hit_point);
+            path_normals.Add(GazeGestureManager.Instance.hit_normal);//TODO: if a not flat surface is tested
 
 
         });

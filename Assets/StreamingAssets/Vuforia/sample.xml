@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<QCARConfig xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="qcar_config.xsd">
+  <Tracking>
+    <ImageTarget name="qr-coder5" size="0.530000 0.530000" />
+    <ImageTarget name="pythonMarker" size="0.270000 0.270000" />
+    <ImageTarget name="sword" size="0.130000 0.130000" />
+    <ImageTarget name="AR_Toolkit_Marker1" size="0.069000 0.069000" />
+    <ImageTarget name="AR_Toolkit_Marker" size="0.250000 0.250000" />
+  </Tracking>
+</QCARConfig>

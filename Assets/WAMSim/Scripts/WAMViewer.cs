@@ -263,7 +263,7 @@ public class WAMViewer : MonoBehaviour
 
          float[] WAMToCameraOrientationArray = { WAMToCameraRotation.x, WAMToCameraRotation.y, WAMToCameraRotation.z, WAMToCameraRotation.w };
          QuaternionMsg q = new QuaternionMsg(WAMToCameraOrientationArray[0], WAMToCameraOrientationArray[1], WAMToCameraOrientationArray[2], WAMToCameraOrientationArray[3]);
-        
+         
 
        
         float[] WAMToCameraPosArray = { worldToCameraPos.x, worldToCameraPos.y, worldToCameraPos.z };
@@ -272,7 +272,7 @@ public class WAMViewer : MonoBehaviour
         float[] WAMToCameraOrientationArray = { worldToCameraRotation.x, worldToCameraRotation.y, worldToCameraRotation.z, worldToCameraRotation.w };
         QuaternionMsg q = new QuaternionMsg(WAMToCameraOrientationArray[0], WAMToCameraOrientationArray[1], WAMToCameraOrientationArray[2], WAMToCameraOrientationArray[3]);
         Transform worldToCameraTransform = Camera.main.transform;
-        ros.Publish(CameraPosePublish.GetMessageTopic(), msgForCam);
+         ros.Publish(CameraPosePublish.GetMessageTopic(), msgForCam);
         */
 
 
