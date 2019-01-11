@@ -14,6 +14,7 @@ public class SpeechManager : MonoBehaviour
     Dictionary<string, System.Action> keywords = new Dictionary<string, System.Action>();
     public Transform path_sphere;
     public Transform barrier;
+    public Transform cubeBarrier;
     public Transform normal_arrow;
     public Transform profile_sphere;
     private LineRenderer lineConnecting;
@@ -315,8 +316,11 @@ public class SpeechManager : MonoBehaviour
 
         keywords.Add("Recalibrate", () =>
         {
-            //When we call "Recalibrate", we want the WAM Robot to recalibrate to the moved marker. 
-            //First, we set the recalibrate variable to true, indicating that we need to recalibrate the WAM robot. recalibrate variable is inside DefaultTrackableEventHandler.cs
+            /*
+            When we call "Recalibrate", we want the WAM Robot to recalibrate to the moved marker. 
+            First, we set the recalibrate variable to true, indicating that we need to recalibrate the WAM robot
+            recalibrate variable is inside DefaultTrackableEventHandler.cs
+            */
             GameObject.Find("ImageTarget").GetComponent<DefaultTrackableEventHandler>().recalibrate=true;
             //The next line activates all datasets that have been deactivated. reActivate function is inside DefaultTrackableEventHandler.cs
             GameObject.Find("ImageTarget").GetComponent<DefaultTrackableEventHandler>().reActivate();
@@ -475,7 +479,25 @@ public class SpeechManager : MonoBehaviour
 
 
         });
+/*
+@Adnan: What I believe is a solution to implementing different geometries for our barriers. Need to add
+prefab that matches this function. Will test out when I am setup with twix again.
 
+        keywords.Add("Cube Barrier", () =>
+        {
+            Debug.Log("Called Barrier");
+            WAM_t = GameObject.Find("WAM").transform;
+            cubeBarrier.tag = "cubeBarrier";
+            var child = Instantiate(cubeBarrier, GazeGestureManager.Instance.hit_point, Quaternion.identity);
+            child.transform.parent = GameObject.Find("ImageTarget").transform;
+            point_wrt_WAM = WAM_t.InverseTransformPoint(GazeGestureManager.Instance.hit_point);
+            point_wrt_WAM = point_wrt_WAM * 0.001F;
+            point_wrt_WAM.y = point_wrt_WAM.y - 0.354F;
+            path_points.Add(point_wrt_WAM);
+            path_points_global.Add(GazeGestureManager.Instance.hit_point);
+            path_normals.Add(GazeGestureManager.Instance.hit_normal);//TODO: if a not flat surface is tested
+        });
+*/
         keywords.Add("Bigger", () =>
         {
 
