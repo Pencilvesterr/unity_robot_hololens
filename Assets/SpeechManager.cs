@@ -155,12 +155,12 @@ public class SpeechManager : MonoBehaviour
         {
             //GameObject.Find("WAM").GetComponent<WAMViewer>().bhandserv.OpenGrasp();
 
-            GameObject.Find("WAM").GetComponent<WAMViewer>().open_hand();
+            GameObject.Find("WAM").GetComponent<WAMViewer>().openHand();
         });
 
         keywords.Add("Close Hand", () =>
         {
-            GameObject.Find("WAM").GetComponent<WAMViewer>().close_hand();
+            GameObject.Find("WAM").GetComponent<WAMViewer>().closeHand();
             // GameObject.Find("WAM").GetComponent<WAMViewer>().bhandserv.CloseGrasp();
         });
 
