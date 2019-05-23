@@ -1,0 +1,26 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "force_profile_unity_wam", "force_profile_unity_wam.csproj", "{BF9703AD-4CFA-514B-3FB9-0532B4BC12A3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "force_profile_unity_wam.Editor", "force_profile_unity_wam.Editor.csproj", "{8A239469-32FF-3A31-A5DE-C8204B91FAD2}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{BF9703AD-4CFA-514B-3FB9-0532B4BC12A3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BF9703AD-4CFA-514B-3FB9-0532B4BC12A3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BF9703AD-4CFA-514B-3FB9-0532B4BC12A3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BF9703AD-4CFA-514B-3FB9-0532B4BC12A3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8A239469-32FF-3A31-A5DE-C8204B91FAD2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8A239469-32FF-3A31-A5DE-C8204B91FAD2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8A239469-32FF-3A31-A5DE-C8204B91FAD2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8A239469-32FF-3A31-A5DE-C8204B91FAD2}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
