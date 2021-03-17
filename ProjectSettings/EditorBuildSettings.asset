@@ -6,5 +6,9 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/ROSscene.unity
-    guid: b5ed8dbbf393329499277d56d94ffc5e
+    path: Assets/Scenes/Panda_Scene.unity
+    guid: 9fc0d4010bbf28b4594072e72b8655ab
+  m_configObjects:
+    Unity.XR.WindowsMR.Settings: {fileID: 0}
+    com.unity.xr.management.loader_settings: {fileID: 11400000, guid: 5d71d441e1c92af448cf740715537a00,
+      type: 2}

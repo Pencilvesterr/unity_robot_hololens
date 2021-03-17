@@ -4,8 +4,17 @@
 TagManager:
   serializedVersion: 2
   tags:
+  - Robot
+  - Robot_arm
+  - ring
+  - BarrierMarker
+  - PersonBarrier
   - clone
-  - barrier
+  - Barrier
+  - UI
+  - Workspace
+  - SpawnMarker
+  - BarrierToSpawn
   layers:
   - Default
   - TransparentFX
@@ -38,7 +47,7 @@ TagManager:
   - 
   - 
   - 
-  - 
+  - Spatial Awareness
   m_SortingLayers:
   - name: Default
     uniqueID: 0
