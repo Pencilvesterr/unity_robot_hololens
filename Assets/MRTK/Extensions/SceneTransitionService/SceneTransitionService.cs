@@ -1,5 +1,5 @@
-// Copyright (c) Microsoft Corporation. All rights reserved.
-// Licensed under the MIT License. See LICENSE in the project root for license information.
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
 
 using Microsoft.MixedReality.Toolkit.UI;
 using Microsoft.MixedReality.Toolkit.Utilities;
@@ -18,7 +18,7 @@ namespace Microsoft.MixedReality.Toolkit.Extensions.SceneTransitions
         "SceneTransitionService/Profiles/DefaultSceneTransitionServiceProfile.asset",
         "MixedRealityToolkit.Extensions",
         true)]
-    [HelpURL("https://microsoft.github.io/MixedRealityToolkit-Unity/Documentation/Extensions/SceneTransitionService/SceneTransitionServiceOverview.html")]
+    [HelpURL("https://docs.microsoft.com/windows/mixed-reality/mrtk-unity/features/extensions/scene-transition-service")]
     public class SceneTransitionService : BaseExtensionService, ISceneTransitionService, IMixedRealityExtensionService
     {
         /// <summary>
@@ -30,9 +30,9 @@ namespace Microsoft.MixedReality.Toolkit.Extensions.SceneTransitions
         /// <param name="profile">The service's configuration profile.</param>
         [Obsolete("This constructor is obsolete (registrar parameter is no longer required) and will be removed in a future version of the Microsoft Mixed Reality Toolkit.")]
         public SceneTransitionService(
-            IMixedRealityServiceRegistrar registrar, 
-            string name, 
-            uint priority, 
+            IMixedRealityServiceRegistrar registrar,
+            string name,
+            uint priority,
             BaseMixedRealityProfile profile) : this(name, priority, profile)
         {
             Registrar = registrar;
@@ -93,6 +93,7 @@ namespace Microsoft.MixedReality.Toolkit.Extensions.SceneTransitions
         /// <inheritdoc />
         public override void Initialize()
         {
+            base.Initialize();
             UseFadeColor = sceneTransitionServiceProfile.UseFadeColor;
             FadeColor = sceneTransitionServiceProfile.FadeColor;
             FadeInTime = sceneTransitionServiceProfile.FadeInTime;
@@ -107,6 +108,10 @@ namespace Microsoft.MixedReality.Toolkit.Extensions.SceneTransitions
             {
                 Debug.LogError("This extension requires an active IMixedRealitySceneService.");
             }
+
+            // Call the base here to ensure any early exits do not
+            // artificially declare the service as enabled.
+            base.Enable();
         }
 
         /// <inheritdoc />
@@ -114,6 +119,7 @@ namespace Microsoft.MixedReality.Toolkit.Extensions.SceneTransitions
         {
             CleanUpDefaultProgressIndicator();
             CleanUpCameraFader();
+            base.Destroy();
         }
 
         #endregion

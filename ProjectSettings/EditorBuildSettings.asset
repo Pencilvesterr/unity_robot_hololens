@@ -9,6 +9,7 @@ EditorBuildSettings:
     path: Assets/Scenes/Panda_Scene.unity
     guid: 9fc0d4010bbf28b4594072e72b8655ab
   m_configObjects:
-    Unity.XR.WindowsMR.Settings: {fileID: 0}
-    com.unity.xr.management.loader_settings: {fileID: 11400000, guid: 5d71d441e1c92af448cf740715537a00,
+    Unity.XR.WindowsMR.Settings: {fileID: 11400000, guid: d56e8d81a7796ed42bb0b845519e52d0,
+      type: 2}
+    com.unity.xr.management.loader_settings: {fileID: 11400000, guid: b85c529f194399646b945c782125deb6,
       type: 2}

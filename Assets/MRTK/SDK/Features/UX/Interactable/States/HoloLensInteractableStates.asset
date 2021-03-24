@@ -33,13 +33,13 @@ MonoBehaviour:
     Bit: 8
     Value: 0
     ActiveIndex: 3
-  - Name: Disabled
-    Index: 7
+  - Name: Pressed
+    Index: 2
     Bit: 16
     Value: 0
     ActiveIndex: 4
-  - Name: Pressed
-    Index: 2
+  - Name: Disabled
+    Index: 7
     Bit: 32
     Value: 0
     ActiveIndex: 5

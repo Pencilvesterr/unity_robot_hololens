@@ -1,5 +1,5 @@
 // Copyright(c) Microsoft Corporation.All rights reserved.
-// Licensed under the MIT License. See LICENSE in the project root for license information.
+// Licensed under the MIT License.
 
 using Microsoft.MixedReality.Toolkit.Input;
 using Microsoft.MixedReality.Toolkit.Utilities;
@@ -13,7 +13,7 @@ namespace Microsoft.MixedReality.Toolkit.Extensions.HandPhysics
     /// A simple service that creates KinematicRigidbodies on fingertips for physics interactions.
     /// </summary>
     [MixedRealityExtensionService(
-        SupportedPlatforms.WindowsUniversal,
+        (SupportedPlatforms)(-1),
         "Hand Physics Service",
         "HandPhysicsService/Profiles/DefaultHandPhysicsServiceProfile.asset",
         "MixedRealityToolkit.Extensions",
@@ -33,7 +33,7 @@ namespace Microsoft.MixedReality.Toolkit.Extensions.HandPhysics
             handPhysicsServiceProfile = (HandPhysicsServiceProfile)profile;
         }
 
-        private IMixedRealityHandJointService HandJointService 
+        private IMixedRealityHandJointService HandJointService
             => handJointService ?? CoreServices.GetInputSystemDataProvider<IMixedRealityHandJointService>();
 
         /// <inheritdoc />
@@ -51,7 +51,8 @@ namespace Microsoft.MixedReality.Toolkit.Extensions.HandPhysics
             get { return fingerTipKinematicBodyPrefab; }
             set
             {
-                if (value != null)
+                fingerTipKinematicBodyPrefab = value;
+                if (fingerTipKinematicBodyPrefab != null)
                 {
                     CreateKinematicBodies();
                 }
@@ -59,7 +60,6 @@ namespace Microsoft.MixedReality.Toolkit.Extensions.HandPhysics
                 {
                     DestroyKinematicBodies();
                 }
-                fingerTipKinematicBodyPrefab = value;
             }
         }
 
@@ -71,7 +71,8 @@ namespace Microsoft.MixedReality.Toolkit.Extensions.HandPhysics
             get { return palmKinematicBodyPrefab; }
             set
             {
-                if(value != null)
+                palmKinematicBodyPrefab = value;
+                if (palmKinematicBodyPrefab != null)
                 {
                     CreateKinematicBodies();
                 }
@@ -79,8 +80,6 @@ namespace Microsoft.MixedReality.Toolkit.Extensions.HandPhysics
                 {
                     DestroyKinematicBodies();
                 }
-
-                palmKinematicBodyPrefab = value;
             }
         }
 
@@ -110,6 +109,7 @@ namespace Microsoft.MixedReality.Toolkit.Extensions.HandPhysics
         /// <inheritdoc />
         public override void Initialize()
         {
+            base.Initialize();
             HandPhysicsLayer = handPhysicsServiceProfile.HandPhysicsLayer;
             UsePalmKinematicBody = handPhysicsServiceProfile.UsePalmKinematicBody;
             FingerTipKinematicBodyPrefab = handPhysicsServiceProfile.FingerTipKinematicBodyPrefab;
@@ -119,6 +119,7 @@ namespace Microsoft.MixedReality.Toolkit.Extensions.HandPhysics
         /// <inheritdoc />
         public override void Enable()
         {
+            base.Enable();
             HandPhysicsServiceRoot = new GameObject("Hand Physics Service");
 
             CreateKinematicBodies();
@@ -132,6 +133,7 @@ namespace Microsoft.MixedReality.Toolkit.Extensions.HandPhysics
                 UnityEngine.Object.Destroy(HandPhysicsServiceRoot);
                 HandPhysicsServiceRoot = null;
             }
+            base.Disable();
         }
 
         private static readonly ProfilerMarker UpdatePerfMarker = new ProfilerMarker("[MRTK] HandPhysicsService.Update");
@@ -141,6 +143,7 @@ namespace Microsoft.MixedReality.Toolkit.Extensions.HandPhysics
         {
             using (UpdatePerfMarker.Auto())
             {
+                base.Update();
                 foreach (JointKinematicBody jointKinematicBody in jointKinematicBodies)
                 {
                     if (HandJointService.IsHandTracked(jointKinematicBody.HandednessType))
@@ -167,12 +170,14 @@ namespace Microsoft.MixedReality.Toolkit.Extensions.HandPhysics
         {
             DestroyKinematicBodies();
 
+            if (HandPhysicsServiceRoot == null) { return; }
+
             // Create joint kinematic bodies.
             for (int i = 0; i < handednessTypes.Length; ++i)
             {
                 for (int j = 0; j < fingerTipTypes.Length; ++j)
                 {
-                    if(FingerTipKinematicBodyPrefab == null) { continue; }
+                    if (FingerTipKinematicBodyPrefab == null) { continue; }
                     if (TryCreateJointKinematicBody(FingerTipKinematicBodyPrefab, HandPhysicsLayer, handednessTypes[i], fingerTipTypes[j], HandPhysicsServiceRoot.transform, out JointKinematicBody jointKinematicBody))
                     {
                         jointKinematicBodies.Add(jointKinematicBody);
@@ -195,7 +200,7 @@ namespace Microsoft.MixedReality.Toolkit.Extensions.HandPhysics
         /// </summary>
         private void DestroyKinematicBodies()
         {
-            if(jointKinematicBodies.Count > 0)
+            if (jointKinematicBodies.Count > 0)
             {
                 // Tear down the old kinematicBodies
                 foreach (JointKinematicBody jointKinematicBody in jointKinematicBodies)
@@ -264,6 +269,5 @@ namespace Microsoft.MixedReality.Toolkit.Extensions.HandPhysics
         }
 
         #endregion HandPhysicsService Implementation
-
     }
 }
