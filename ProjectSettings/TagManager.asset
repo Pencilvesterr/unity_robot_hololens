@@ -15,6 +15,7 @@ TagManager:
   - Workspace
   - SpawnMarker
   - BarrierToSpawn
+  - ZoneSelectionRing
   layers:
   - Default
   - TransparentFX
