@@ -17,7 +17,7 @@ public class ManagerCWS : MonoBehaviour {
     void Start()
     {
         // Fine all CWS Zones based on their name
-        Zones = new Dictionary<int, GameObject>{
+        Zones = new Dictionary<int, GameObject> { 
             {1, GameObject.Find("Zone Space 1")},
             {2, GameObject.Find("Zone Space 2")},
             {3, GameObject.Find("Zone Space 3")}
@@ -40,17 +40,28 @@ public class ManagerCWS : MonoBehaviour {
     public void SetSelectedZoneHuman(int i)
     {
         if (Zones.ContainsKey(i))
+        { 
         
             if (SelectedZoneHuman != -1)
             {
                 Zones[SelectedZoneHuman].GetComponent<MeshRenderer>().material = DefaultMaterial;
             }
 
-        SelectedZoneHuman = i;
-        Zones[i].GetComponent<MeshRenderer>().material = HumanSelectedMaterial;
- 
+            SelectedZoneHuman = i;
+            Zones[i].GetComponent<MeshRenderer>().material = HumanSelectedMaterial;
         }  
     }
+
+    public void ClearAllZones()
+    {
+        Dictionary<int, GameObject>.KeyCollection keys = Zones.Keys;
+        foreach (int key in keys)
+        {
+            Zones[key].GetComponent<MeshRenderer>().material = DefaultMaterial;
+        }
+    }
+
+}
 
  
 
