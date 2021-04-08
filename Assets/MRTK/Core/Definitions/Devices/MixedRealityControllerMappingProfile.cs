@@ -1,5 +1,5 @@
-﻿// Copyright (c) Microsoft Corporation.
-// Licensed under the MIT License.
+﻿// Copyright (c) Microsoft Corporation. All rights reserved.
+// Licensed under the MIT License. See LICENSE in the project root for license information.
 
 using Microsoft.MixedReality.Toolkit.Utilities;
 using System;
@@ -214,10 +214,12 @@ namespace Microsoft.MixedReality.Toolkit.Input
             });
         }
 
+#endif // UNITY_EDITOR
+
         private static bool UsesCustomInteractionMapping(Type controllerType)
         {
             var attribute = MixedRealityControllerAttribute.Find(controllerType);
-            return attribute != null && attribute.Flags.HasFlag(MixedRealityControllerConfigurationFlags.UseCustomInteractionMappings);
+            return attribute != null ? attribute.Flags.HasFlag(MixedRealityControllerConfigurationFlags.UseCustomInteractionMappings) : false;
         }
 
         private static Handedness[] GetSupportedHandedness(Type controllerType)
@@ -225,6 +227,5 @@ namespace Microsoft.MixedReality.Toolkit.Input
             var attribute = MixedRealityControllerAttribute.Find(controllerType);
             return attribute != null ? attribute.SupportedHandedness : Array.Empty<Handedness>();
         }
-#endif // UNITY_EDITOR
     }
 }

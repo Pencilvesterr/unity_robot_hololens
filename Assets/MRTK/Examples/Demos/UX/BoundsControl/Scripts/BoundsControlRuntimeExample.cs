@@ -1,17 +1,17 @@
-﻿// Copyright (c) Microsoft Corporation.
-// Licensed under the MIT License.
+﻿// Copyright (c) Microsoft Corporation. All rights reserved.
+// Licensed under the MIT License. See LICENSE in the project root for license information.
 
 using Microsoft.MixedReality.Toolkit.Input;
 using Microsoft.MixedReality.Toolkit.UI;
-using Microsoft.MixedReality.Toolkit.UI.BoundsControl;
-using Microsoft.MixedReality.Toolkit.UI.BoundsControlTypes;
+using Microsoft.MixedReality.Toolkit.Experimental.UI.BoundsControl;
+using Microsoft.MixedReality.Toolkit.Experimental.UI.BoundsControlTypes;
 using Microsoft.MixedReality.Toolkit.Utilities;
 using System.Collections;
 using System.Text;
 using TMPro;
 using UnityEngine;
 
-namespace Microsoft.MixedReality.Toolkit.Examples.Demos
+namespace Microsoft.MixedReality.Toolkit.Examples.Experimental.Demos
 {
     /// <summary>
     /// This example script demonstrates various bounds control runtime configurations
@@ -160,7 +160,7 @@ namespace Microsoft.MixedReality.Toolkit.Examples.Demos
 
                 SetStatus("Rotate 20 degrees and update rig");
                 cube.transform.localRotation = Quaternion.Euler(0, 20, 0);
-                boundsControl.RotationHandlesConfig.ShowHandleForY = true;
+                boundsControl.RotationHandlesConfig.ShowRotationHandleForY = true;
                 yield return WaitForSpeechCommand();
 
                 SetStatus("Wireframe radius 0.1");
@@ -190,7 +190,7 @@ namespace Microsoft.MixedReality.Toolkit.Examples.Demos
                     var cubechild = GameObject.CreatePrimitive(PrimitiveType.Cube);
                     cubechild.transform.localPosition = Random.insideUnitSphere + cubePosition + forwardOffset;
                     cubechild.transform.rotation = Quaternion.Euler(Random.insideUnitSphere * 360f);
-                    cubechild.transform.parent = (lastParent != null) ? lastParent : multiRoot.transform;
+                    cubechild.transform.parent = lastParent ?? multiRoot.transform;
                     float baseScale = lastParent == null ? 0.1f : 1f;
                     cubechild.transform.localScale = new Vector3(baseScale, baseScale, baseScale);
                     lastParent = cubechild.transform;

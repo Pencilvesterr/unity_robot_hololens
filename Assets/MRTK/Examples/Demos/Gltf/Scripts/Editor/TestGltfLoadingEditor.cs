@@ -1,6 +1,7 @@
-﻿// Copyright (c) Microsoft Corporation.
-// Licensed under the MIT License.
+﻿// Copyright (c) Microsoft Corporation. All rights reserved.
+// Licensed under the MIT License. See LICENSE in the project root for license information.
 
+using Microsoft.MixedReality.Toolkit.Utilities.Editor;
 using System.IO;
 using UnityEditor;
 using UnityEngine;
@@ -13,11 +14,11 @@ namespace Microsoft.MixedReality.Toolkit.Examples.Demos.Gltf.Editor
     [CustomEditor(typeof(TestGltfLoading))]
     public class TestGltfLoadingEditor : UnityEditor.Editor
     {
-        private const string GLTFModelsFolderGUID = "55bea35f05e99164cacb9c7dabdd25ee";
+        private string GLTFModelsPath = $"Demos{Path.DirectorySeparatorChar}Gltf{Path.DirectorySeparatorChar}Models";
 
         public override void OnInspectorGUI()
         {
-            var testGltfLoading = target as TestGltfLoading;
+            var testGltfLoading = this.target as TestGltfLoading;
 
             base.OnInspectorGUI();
 
@@ -28,11 +29,13 @@ namespace Microsoft.MixedReality.Toolkit.Examples.Demos.Gltf.Editor
                 EditorGUILayout.HelpBox("glTF path was not discovered in the streaming assets folder. Please copy over files to test example scene", MessageType.Warning);
             }
 
-            if (GUILayout.Button("Copy models to StreamingAssets"))
+            if (GUILayout.Button("Copy GLTF Directory to Streaming Assets"))
             {
-                string modelsPath = AssetDatabase.GUIDToAssetPath(GLTFModelsFolderGUID);
-                DirectoryCopy(modelsPath, Path.Combine(Application.streamingAssetsPath, "GltfModels"));
-                AssetDatabase.Refresh(ImportAssetOptions.ForceUpdate);
+                string modelPath = MixedRealityToolkitFiles.MapRelativeFolderPathToAbsolutePath(MixedRealityToolkitModuleType.Examples, GLTFModelsPath);
+                DirectoryCopy(modelPath, Path.Combine(Application.streamingAssetsPath, "GltfModels"));
+#if UNITY_EDITOR
+                UnityEditor.AssetDatabase.Refresh(UnityEditor.ImportAssetOptions.ForceUpdate);
+#endif
                 Debug.Log("Copied glTF model files to Streaming Assets folder");
             }
         }

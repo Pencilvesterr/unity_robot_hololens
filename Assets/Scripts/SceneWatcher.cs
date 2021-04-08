@@ -66,7 +66,7 @@ namespace RosSharp.RosBridgeClient
 			workspace.primitives = new MessageTypes.Shape.SolidPrimitive[] // Only one mesh, with (x, y, z) dimensions listed below
 				{new MessageTypes.Shape.SolidPrimitive(MessageTypes.Shape.SolidPrimitive.BOX, new double[3] { 1.80f, 1.25f, 0.02f }) }; 
 			workspace.primitive_poses = new MessageTypes.Geometry.Pose[] { new MessageTypes.Geometry.Pose() };
-			workspace.primitive_poses[0].position = new MessageTypes.Geometry.Point(-0.1, -0.1, -0.01);
+			workspace.primitive_poses[0].position = new MessageTypes.Geometry.Point(-0.1, 0.3, -0.01);
 			workspace.primitive_poses[0].orientation = new MessageTypes.Geometry.Quaternion(0, 0, 0, 1);
             #endregion
 			// Start updating the planningScene to ROS
@@ -93,8 +93,8 @@ namespace RosSharp.RosBridgeClient
 				{
 					// Update the barrier message and added it to the barrier list
 					// Dimensions
-					pb_message.primitives[0].dimensions[MessageTypes.Shape.SolidPrimitive.CYLINDER_HEIGHT] = personBarrier.GetComponent<CapsuleCollider>().height;
-					pb_message.primitives[0].dimensions[MessageTypes.Shape.SolidPrimitive.CYLINDER_RADIUS] = personBarrier.GetComponent<CapsuleCollider>().radius;
+					pb_message.primitives[0].dimensions[MessageTypes.Shape.SolidPrimitive.CYLINDER_HEIGHT] = 1.75f; //TODO: The scale is hardcoded due to the mismatch in Unity Scale with the actual size
+					pb_message.primitives[0].dimensions[MessageTypes.Shape.SolidPrimitive.CYLINDER_RADIUS] = personBarrier.transform.localScale.x/2;
 					// Pose
 					pb_message.primitive_poses[0].position = GetGeometryPoint(ros_world_coord_frame.InverseTransformPoint(personBarrier.transform.position).Unity2Ros());
 					barrier_msgs.Add(pb_message);

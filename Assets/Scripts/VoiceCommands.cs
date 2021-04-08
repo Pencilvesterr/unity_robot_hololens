@@ -239,6 +239,16 @@ public class VoiceCommands : MonoBehaviour
         Debug.LogFormat("Adding point {0} at {1}", pathPoints.Count, ros_world_coord_frame.InverseTransformPoint(child.position).ToString("F3"));
     }
 
+    public void ClearLastPoint()
+    {
+        var clones = GameObject.FindGameObjectsWithTag("clone");
+
+        if (clones.Length > 0)
+        {
+            Destroy(clones[clones.Length - 1]);
+        }
+    }
+
     public void AddCubeBarrier()
     {
         AddBarrier(0);

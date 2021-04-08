@@ -1,5 +1,5 @@
-﻿// Copyright (c) Microsoft Corporation.
-// Licensed under the MIT License.﻿
+﻿// Copyright (c) Microsoft Corporation. All rights reserved.
+// Licensed under the MIT License. See LICENSE in the project root for license information.﻿
 
 using Microsoft.MixedReality.Toolkit.SceneSystem;
 using System.Collections.Generic;
@@ -32,9 +32,10 @@ namespace Microsoft.MixedReality.Toolkit.Editor
         {
             // Get the scene system itself
             IMixedRealitySceneSystem sceneSystem = target as IMixedRealitySceneSystem;
-
             // Get the scene system's editor interface
-            if (!(target is IMixedRealitySceneSystemEditor sceneSystemEditor))
+            IMixedRealitySceneSystemEditor sceneSystemEditor = target as IMixedRealitySceneSystemEditor;
+
+            if (sceneSystemEditor == null)
             {
                 EditorGUILayout.HelpBox("This scene service implementation does not implement IMixedRealitySceneSystemEditor. Inspector will not be rendered.", MessageType.Info);
                 return;

@@ -52,7 +52,7 @@ public class BarrierPerson : MonoBehaviour
 
     void LateUpdate()
     {
-        transform.position = Camera.main.transform.position + new Vector3(0, -0.3f, 0);
+        transform.position = Camera.main.transform.position + new Vector3(0, -0.5f, 0);
     }
 
     // Enable/Disable MeshCollider of PersonBarrier and RobotModel

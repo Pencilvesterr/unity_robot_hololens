@@ -33,10 +33,10 @@ namespace Microsoft.MixedReality.Toolkit.Utilities
     /// ensure that coroutines run properly with async/await.
     /// </summary>
     /// <remarks>
-    /// <para>The object that this MonoBehavior is attached to must be a root object in the
+    /// The object that this MonoBehavior is attached to must be a root object in the
     /// scene, as it will be marked as DontDestroyOnLoad (so that when scenes are changed,
     /// it will persist instead of being destroyed). The runner will force itself to
-    /// the root of the scene if it's rooted elsewhere.</para>
+    /// the root of the scene if it's rooted elsewhere.
     /// </remarks>
     [AddComponentMenu("Scripts/MRTK/Core/AsyncCoroutineRunner")]
     internal sealed class AsyncCoroutineRunner : MonoBehaviour

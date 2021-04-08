@@ -1,5 +1,5 @@
-﻿// Copyright (c) Microsoft Corporation.
-// Licensed under the MIT License.
+﻿// Copyright (c) Microsoft Corporation. All rights reserved.
+// Licensed under the MIT License. See LICENSE in the project root for license information.
 
 using System;
 using System.Collections.Generic;
@@ -27,7 +27,7 @@ namespace Microsoft.MixedReality.Toolkit
 
             Parallel.ForEach(searchAssemblies, (assembly) =>
             {
-                Parallel.ForEach(assembly.GetLoadableTypes(), (type) =>
+                Parallel.ForEach(assembly.GetTypes(), (type) =>
                 {
                     if (type != null && type.IsClass && !type.IsAbstract && type.IsSubclassOf(rootType))
                     {

@@ -9,14 +9,16 @@ namespace Microsoft.MixedReality.Toolkit.Experimental.UI
     /// </summary>
     public class NonNativeKeyboardTouchAssistant : MonoBehaviour
     {
-        [SerializeField]
+        [SerializeField] 
         private AudioClip clickSound = null;
 
         private AudioSource clickSoundPlayer;
 
         private void Start()
         {
-            if (CoreServices.InputSystem is IMixedRealityCapabilityCheck capabilityChecker && capabilityChecker.CheckCapability(MixedRealityCapability.ArticulatedHand))
+            var capabilityChecker = CoreServices.InputSystem as IMixedRealityCapabilityCheck;
+
+            if(capabilityChecker != null && capabilityChecker.CheckCapability(MixedRealityCapability.ArticulatedHand))
             {
                 EnableTouch();
             }

@@ -1,8 +1,7 @@
-﻿// Copyright (c) Microsoft Corporation.
-// Licensed under the MIT License.
+﻿// Copyright (c) Microsoft Corporation. All rights reserved.
+// Licensed under the MIT License. See LICENSE in the project root for license information.
 
 using System;
-using UnityEngine;
 
 namespace Microsoft.MixedReality.Toolkit.Utilities.Gltf.Schema
 {
@@ -11,7 +10,7 @@ namespace Microsoft.MixedReality.Toolkit.Utilities.Gltf.Schema
     /// https://github.com/KhronosGroup/glTF/blob/master/specification/2.0/schema/accessor.sparse.indices.schema.json
     /// </summary>
     [Serializable]
-    public class GltfAccessorSparseIndices : GltfProperty, ISerializationCallbackReceiver
+    public class GltfAccessorSparseIndices : GltfProperty
     {
         /// <summary>
         /// The index of the bufferView with sparse indices.
@@ -31,26 +30,6 @@ namespace Microsoft.MixedReality.Toolkit.Utilities.Gltf.Schema
         /// `5123` (UNSIGNED_SHORT)
         /// `5125` (UNSIGNED_INT)
         /// </summary>
-        public GltfComponentType ComponentType { get; set; }
-
-        [SerializeField]
-        private string componentType = null;
-
-        void ISerializationCallbackReceiver.OnAfterDeserialize()
-        {
-            if (Enum.TryParse(componentType, out GltfComponentType result))
-            {
-                ComponentType = result;
-            }
-            else
-            {
-                ComponentType = default;
-            }
-        }
-
-        void ISerializationCallbackReceiver.OnBeforeSerialize()
-        {
-            componentType = ComponentType.ToString();
-        }
+        public GltfComponentType ComponentType;
     }
 }

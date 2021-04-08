@@ -1,5 +1,5 @@
-﻿// Copyright (c) Microsoft Corporation.
-// Licensed under the MIT License.
+﻿// Copyright (c) Microsoft Corporation. All rights reserved.
+// Licensed under the MIT License. See LICENSE in the project root for license information.
 
 using Microsoft.MixedReality.Toolkit.Utilities;
 using UnityEngine;
@@ -10,7 +10,7 @@ namespace Microsoft.MixedReality.Toolkit.Input
     /// Configuration profile settings for setting up controller pointers.
     /// </summary>
     [CreateAssetMenu(menuName = "Mixed Reality Toolkit/Profiles/Mixed Reality Pointer Profile", fileName = "MixedRealityInputPointerProfile", order = (int)CreateProfileMenuItemIndices.Pointer)]
-    [HelpURL("https://docs.microsoft.com/windows/mixed-reality/mrtk-unity/features/input/pointers")]
+    [HelpURL("https://microsoft.github.io/MixedRealityToolkit-Unity/Documentation/Input/Pointers.html")]
     public class MixedRealityPointerProfile : BaseMixedRealityProfile
     {
         [SerializeField]
@@ -73,7 +73,7 @@ namespace Microsoft.MixedReality.Toolkit.Input
 
         [SerializeField]
         [Tooltip("If true, platform-specific head gaze override is used, when available. Otherwise, the center of the camera frame is used by default.")]
-        private bool useHeadGazeOverride = false;
+        private bool useHeadGazeOverride = true;
 
         /// <summary>
         /// If true, platform-specific head gaze override is used, when available. Otherwise, the center of the camera frame is used by default.

@@ -12,7 +12,7 @@ namespace Microsoft.MixedReality.Toolkit.XRSDK
     /// <summary>
     /// The Boundary system controls the presentation and display of the users boundary in a scene.
     /// </summary>
-    [HelpURL("https://docs.microsoft.com/windows/mixed-reality/mrtk-unity/features/boundary/boundary-system-getting-started")]
+    [HelpURL("https://microsoft.github.io/MixedRealityToolkit-Unity/Documentation/Boundary/BoundarySystemGettingStarted.html")]
     public class XRSDKBoundarySystem : BaseBoundarySystem
     {
         /// <summary>
@@ -26,25 +26,23 @@ namespace Microsoft.MixedReality.Toolkit.XRSDK
         {
         }
 
-#if UNITY_2019_3_OR_NEWER
-        private static readonly List<XRInputSubsystem> XRInputSubsystems = new List<XRInputSubsystem>();
-#endif // UNITY_2019_3_OR_NEWER
-
-        /// <inheritdoc/>
-        protected override bool IsXRDevicePresent
-        {
-            get
-            {
-                List<InputDevice> devices = new List<InputDevice>();
-                InputDevices.GetDevicesWithCharacteristics(InputDeviceCharacteristics.HeadMounted, devices);
-                return devices.Count > 0;
-            }
-        }
-
         #region IMixedRealityService Implementation
 
         /// <inheritdoc/>
         public override string Name { get; protected set; } = "XR SDK Boundary System";
+
+        /// <inheritdoc/>
+        public override void Initialize()
+        {
+            if (!Application.isPlaying) { return; }
+
+            List<InputDevice> devices = new List<InputDevice>();
+            InputDevices.GetDevicesWithCharacteristics(InputDeviceCharacteristics.HeadMounted, devices);
+
+            if (devices.Count <= 0) { return; }
+
+            base.Initialize();
+        }
 
         #endregion IMixedRealityService Implementation
 
@@ -52,7 +50,7 @@ namespace Microsoft.MixedReality.Toolkit.XRSDK
         protected override List<Vector3> GetBoundaryGeometry()
         {
             // Boundaries are supported for Room Scale experiences only.
-            if (XRSubsystemHelpers.InputSubsystem?.GetTrackingOriginMode() != TrackingOriginModeFlags.Floor)
+            if (XRSDKSubsystemHelpers.InputSubsystem.GetTrackingOriginMode() != TrackingOriginModeFlags.Floor)
             {
                 return null;
             }
@@ -60,21 +58,8 @@ namespace Microsoft.MixedReality.Toolkit.XRSDK
             // Get the boundary geometry.
             var boundaryGeometry = new List<Vector3>(0);
 
-            if (!XRSubsystemHelpers.InputSubsystem.TryGetBoundaryPoints(boundaryGeometry) || boundaryGeometry.Count == 0)
+            if (!XRSDKSubsystemHelpers.InputSubsystem.TryGetBoundaryPoints(boundaryGeometry) || boundaryGeometry.Count == 0)
             {
-#if UNITY_2019_3_OR_NEWER
-                // If the "main" input subsystem doesn't have an available boundary, check the rest of them
-                SubsystemManager.GetInstances(XRInputSubsystems);
-                foreach (XRInputSubsystem xrInputSubsystem in XRInputSubsystems)
-                {
-                    if (xrInputSubsystem.running &&
-                        xrInputSubsystem.TryGetBoundaryPoints(boundaryGeometry) &&
-                        boundaryGeometry.Count > 0)
-                    {
-                        return boundaryGeometry;
-                    }
-                }
-#endif // UNITY_2019_3_OR_NEWER
                 return null;
             }
 
@@ -109,7 +94,7 @@ namespace Microsoft.MixedReality.Toolkit.XRSDK
                     break;
             }
 
-            if (XRSubsystemHelpers.InputSubsystem != null && !XRSubsystemHelpers.InputSubsystem.TrySetTrackingOriginMode(trackingOriginMode))
+            if (!XRSDKSubsystemHelpers.InputSubsystem.TrySetTrackingOriginMode(trackingOriginMode))
             {
                 Debug.LogWarning("Tracking origin unable to be set.");
             }

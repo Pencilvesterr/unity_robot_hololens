@@ -1,5 +1,5 @@
-﻿// Copyright (c) Microsoft Corporation.
-// Licensed under the MIT License.
+﻿// Copyright (c) Microsoft Corporation. All rights reserved.
+// Licensed under the MIT License. See LICENSE in the project root for license information.
 
 using Microsoft.MixedReality.Toolkit.Utilities;
 using UnityEngine;
@@ -7,7 +7,7 @@ using UnityEngine;
 namespace Microsoft.MixedReality.Toolkit.Input
 {
     [CreateAssetMenu(menuName = "Mixed Reality Toolkit/Profiles/Mixed Reality Hand Tracking Profile", fileName = "MixedRealityHandTrackingProfile", order = (int)CreateProfileMenuItemIndices.HandTracking)]
-    [HelpURL("https://docs.microsoft.com/windows/mixed-reality/mrtk-unity/features/input/hand-tracking")]
+    [HelpURL("https://microsoft.github.io/MixedRealityToolkit-Unity/Documentation/Input/HandTracking.html")]
     public class MixedRealityHandTrackingProfile : BaseMixedRealityProfile
     {
         [SerializeField]
@@ -50,10 +50,10 @@ namespace Microsoft.MixedReality.Toolkit.Input
         /// The hand mesh visualization enable/disable state of the current application mode.
         /// </summary>
         /// <remarks>
-        /// <para>If this property is called while in-editor, this will only affect the in-editor settings
-        /// (i.e. the SupportedApplicationModes.Editor flag of HandMeshVisualizationModes).</para>
-        /// <para>If this property is called while in-player, this will only affect the in-player settings
-        /// (i.e. the SupportedApplicationModes.Player flag of HandMeshVisualizationModes).</para>
+        /// If this property is called while in-editor, this will only affect the in-editor settings
+        /// (i.e. the SupportedApplicationModes.Editor flag of HandMeshVisualizationModes).
+        /// If this property is called while in-player, this will only affect the in-player settings
+        /// (i.e. the SupportedApplicationModes.Player flag of HandMeshVisualizationModes).
         /// </remarks>
         public bool EnableHandMeshVisualization
         {
@@ -65,10 +65,10 @@ namespace Microsoft.MixedReality.Toolkit.Input
         /// The hand joint visualization enable/disable state of the current application mode.
         /// </summary>
         /// <remarks>
-        /// <para>If this property is called while in-editor, this will only affect the in-editor settings
-        /// (i.e. the SupportedApplicationModes.Editor flag of HandJointVisualizationModes).</para>
-        /// <para>If this property is called while in-player, this will only affect the in-player settings
-        /// (i.e. the SupportedApplicationModes.Player flag of HandJointVisualizationModes).</para>
+        /// If this property is called while in-editor, this will only affect the in-editor settings
+        /// (i.e. the SupportedApplicationModes.Editor flag of HandJointVisualizationModes).
+        /// If this property is called while in-player, this will only affect the in-player settings
+        /// (i.e. the SupportedApplicationModes.Player flag of HandJointVisualizationModes).
         /// </remarks>
         public bool EnableHandJointVisualization
         {
@@ -103,9 +103,9 @@ namespace Microsoft.MixedReality.Toolkit.Input
         /// the current mode that the code is running in.
         /// </summary>
         /// <remarks>
-        /// <para>For example, if the code is currently running in editor mode (for testing in-editor
+        /// For example, if the code is currently running in editor mode (for testing in-editor
         /// simulation), this would return true if modes contained the SupportedApplicationModes.Editor 
-        /// bit.</para>
+        /// bit.
         /// </remarks>
         private static bool IsSupportedApplicationMode(SupportedApplicationModes modes)
         {
@@ -121,9 +121,9 @@ namespace Microsoft.MixedReality.Toolkit.Input
         /// currently active application mode.
         /// </summary>
         /// <remarks>
-        /// <para>For example, if the code is currently running in editor mode (for testing in-editor
+        /// For example, if the code is currently running in editor mode (for testing in-editor
         /// simulation), and modes is currently SupportedApplicationModes.Player | SupportedApplicationModes.Editor
-        /// and enabled is 'false', this would return SupportedApplicationModes.Player.</para>
+        /// and enabled is 'false', this would return SupportedApplicationModes.Player.
         /// </remarks>
         private static SupportedApplicationModes UpdateSupportedApplicationMode(bool enabled, SupportedApplicationModes modes)
         {

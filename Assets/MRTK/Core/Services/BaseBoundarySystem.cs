@@ -24,14 +24,27 @@ namespace Microsoft.MixedReality.Toolkit.Boundary
             BoundaryProfile = profile;
         }
 
-        /// <summary>
-        /// Reads the visualization profile contents and stores the values in class properties.
-        /// </summary>
-        private void ReadProfile()
+        #region IMixedRealityService Implementation
+
+        private MixedRealityBoundaryVisualizationProfile BoundaryProfile { get; }
+
+        private BoundaryEventData boundaryEventData = null;
+
+        /// <inheritdoc/>
+        public override string Name { get; protected set; } = "Mixed Reality Boundary System";
+
+        /// <inheritdoc/>
+        public override void Initialize()
         {
-            if (BoundaryProfile == null) { return; }
+            if (!Application.isPlaying || BoundaryProfile == null) { return; }
+
+            boundaryEventData = new BoundaryEventData(EventSystem.current);
 
             BoundaryHeight = BoundaryProfile.BoundaryHeight;
+
+            SetTrackingSpace();
+            CalculateBoundaryBounds();
+
             ShowFloor = BoundaryProfile.ShowFloor;
             FloorPhysicsLayer = BoundaryProfile.FloorPhysicsLayer;
             ShowPlayArea = BoundaryProfile.ShowPlayArea;
@@ -42,43 +55,7 @@ namespace Microsoft.MixedReality.Toolkit.Boundary
             BoundaryWallsPhysicsLayer = BoundaryProfile.BoundaryWallsPhysicsLayer;
             ShowBoundaryCeiling = BoundaryProfile.ShowBoundaryCeiling;
             CeilingPhysicsLayer = BoundaryProfile.CeilingPhysicsLayer;
-        }
 
-        /// <summary>
-        /// Whether any XR device is present.
-        /// </summary>
-        protected virtual bool IsXRDevicePresent { get; } = true;
-
-        #region IMixedRealityService Implementation
-
-        private MixedRealityBoundaryVisualizationProfile BoundaryProfile { get; }
-
-        private BoundaryEventData boundaryEventData = null;
-
-        /// <inheritdoc/>
-        public override string Name { get; protected set; } = "Mixed Reality Boundary System";
-
-        private bool boundarySystemInitialized = false;
-
-        /// <inheritdoc/>
-        public override void Initialize()
-        {
-            base.Initialize();
-
-            // The profile needs to be read on initialization to ensure that re-initialization
-            // after profile change reads the correct data.
-            ReadProfile();
-
-            if (!Application.isPlaying || !IsXRDevicePresent) { return; }
-
-            boundaryEventData = new BoundaryEventData(EventSystem.current);
-
-            SetTrackingSpace();
-            CalculateBoundaryBounds();
-
-            boundarySystemInitialized = true;
-
-            RefreshVisualization();
             RaiseBoundaryVisualizationChanged();
         }
 
@@ -176,8 +153,6 @@ namespace Microsoft.MixedReality.Toolkit.Boundary
             showCeiling = false;
 
             RaiseBoundaryVisualizationChanged();
-
-            base.Destroy();
         }
 
 
@@ -325,7 +300,17 @@ namespace Microsoft.MixedReality.Toolkit.Boundary
                 {
                     showFloor = value;
 
-                    PropertyAction(value, currentFloorObject, () => GetFloorVisualization());
+                    if (value && (currentFloorObject == null))
+                    {
+                        GetFloorVisualization();
+                    }
+
+                    if (currentFloorObject != null)
+                    {
+                        currentFloorObject.SetActive(value);
+                    }
+
+                    RaiseBoundaryVisualizationChanged();
                 }
             }
         }
@@ -366,7 +351,17 @@ namespace Microsoft.MixedReality.Toolkit.Boundary
                 {
                     showPlayArea = value;
 
-                    PropertyAction(value, currentPlayAreaObject, () => GetPlayAreaVisualization());
+                    if (value && (currentPlayAreaObject == null))
+                    {
+                        GetPlayAreaVisualization();
+                    }
+
+                    if (currentPlayAreaObject != null)
+                    {
+                        currentPlayAreaObject.SetActive(value);
+                    }
+
+                    RaiseBoundaryVisualizationChanged();
                 }
             }
         }
@@ -408,7 +403,17 @@ namespace Microsoft.MixedReality.Toolkit.Boundary
                 {
                     showTrackedArea = value;
 
-                    PropertyAction(value, currentTrackedAreaObject, () => GetTrackedAreaVisualization());
+                    if (value && (currentTrackedAreaObject == null))
+                    {
+                        GetTrackedAreaVisualization();
+                    }
+
+                    if (currentTrackedAreaObject != null)
+                    {
+                        currentTrackedAreaObject.SetActive(value);
+                    }
+
+                    RaiseBoundaryVisualizationChanged();
                 }
             }
         }
@@ -450,7 +455,17 @@ namespace Microsoft.MixedReality.Toolkit.Boundary
                 {
                     showBoundaryWalls = value;
 
-                    PropertyAction(value, currentBoundaryWallObject, () => GetBoundaryWallVisualization());
+                    if (value && (currentBoundaryWallObject == null))
+                    {
+                        GetBoundaryWallVisualization();
+                    }
+
+                    if (currentBoundaryWallObject != null)
+                    {
+                        currentBoundaryWallObject.SetActive(value);
+                    }
+
+                    RaiseBoundaryVisualizationChanged();
                 }
             }
         }
@@ -492,7 +507,17 @@ namespace Microsoft.MixedReality.Toolkit.Boundary
                 {
                     showCeiling = value;
 
-                    PropertyAction(value, currentCeilingObject, () => GetBoundaryCeilingVisualization());
+                    if (value && (currentCeilingObject == null))
+                    {
+                        GetBoundaryCeilingVisualization();
+                    }
+
+                    if (currentCeilingObject != null)
+                    {
+                        currentCeilingObject.SetActive(value);
+                    }
+
+                    RaiseBoundaryVisualizationChanged();
                 }
             }
         }
@@ -520,44 +545,6 @@ namespace Microsoft.MixedReality.Toolkit.Boundary
                     currentFloorObject.layer = ceilingPhysicsLayer;
                 }
             }
-        }
-
-        private void PropertyAction(bool value, GameObject boundaryObject, System.Action getVisualizationMethod, bool raiseEvent = true)
-        {
-            // If not done initializing, no need to raise the changed event or check the visualization.
-            // These will both happen at the end of the initialization flow.
-            if (!boundarySystemInitialized)
-            {
-                return;
-            }
-
-            if (value && (boundaryObject == null))
-            {
-                getVisualizationMethod();
-            }
-
-            if (boundaryObject != null)
-            {
-                boundaryObject.SetActive(value);
-            }
-
-            if (raiseEvent)
-            {
-                RaiseBoundaryVisualizationChanged();
-            }
-        }
-
-        /// <summary>
-        /// Refreshes the current boundary visualizations without raising changed events.
-        /// Used during the initialization flow.
-        /// </summary>
-        private void RefreshVisualization()
-        {
-            PropertyAction(ShowFloor, currentFloorObject, () => GetFloorVisualization(), false);
-            PropertyAction(ShowPlayArea, currentPlayAreaObject, () => GetPlayAreaVisualization(), false);
-            PropertyAction(ShowTrackedArea, currentTrackedAreaObject, () => GetTrackedAreaVisualization(), false);
-            PropertyAction(ShowBoundaryWalls, currentBoundaryWallObject, () => GetBoundaryWallVisualization(), false);
-            PropertyAction(ShowBoundaryCeiling, currentCeilingObject, () => GetBoundaryCeilingVisualization(), false);
         }
 
         /// <inheritdoc/>

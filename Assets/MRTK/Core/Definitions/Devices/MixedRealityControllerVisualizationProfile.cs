@@ -1,10 +1,9 @@
-﻿// Copyright (c) Microsoft Corporation.
-// Licensed under the MIT License.
+﻿// Copyright (c) Microsoft Corporation. All rights reserved.
+// Licensed under the MIT License. See LICENSE in the project root for license information.
 
 using Microsoft.MixedReality.Toolkit.Utilities;
 using System;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 namespace Microsoft.MixedReality.Toolkit.Input
 {
@@ -24,7 +23,7 @@ namespace Microsoft.MixedReality.Toolkit.Input
         /// </summary>
         public bool RenderMotionControllers
         {
-            get => renderMotionControllers;
+            get =>  renderMotionControllers;
             private set => renderMotionControllers = value;
         }
 
@@ -44,43 +43,29 @@ namespace Microsoft.MixedReality.Toolkit.Input
 
         [SerializeField]
         [Tooltip("Check to obtain controller models from the platform SDK. If left unchecked, the global models will be used. Note: this value is overridden by controller definitions.")]
-        [FormerlySerializedAs("useDefaultModels")]
-        private bool usePlatformModels = false;
+        private bool useDefaultModels = false;
 
         /// <summary>
         /// Check to obtain controller models from the platform SDK. If left unchecked, the global models will be used. Note: this value is overridden by controller definitions.
         /// </summary>
-        public bool UsePlatformModels
+        public bool UseDefaultModels
         {
-            get => usePlatformModels;
-            private set => usePlatformModels = value;
+            get => useDefaultModels;
+            private set => useDefaultModels = value;
         }
-
-        /// <summary>
-        /// Check to obtain controller models from the platform SDK. If left unchecked, the global models will be used. Note: this value is overridden by controller definitions.
-        /// </summary>
-        [Obsolete("Use UsePlatformModels instead.")]
-        public bool UseDefaultModels => usePlatformModels;
 
         [SerializeField]
         [Tooltip("The default controller model material when loading platform SDK controller models. This value is used as a fallback if no controller definition exists with a custom material type.")]
-        [FormerlySerializedAs("defaultControllerModelMaterial")]
-        private Material platformModelMaterial;
+        private Material defaultControllerModelMaterial;
 
         /// <summary>
         /// The default controller model material when loading platform SDK controller models. This value is used as a fallback if no controller definition exists with a custom material type.
         /// </summary>
-        public Material PlatformModelMaterial
+        public Material DefaultControllerModelMaterial
         {
-            get => platformModelMaterial;
-            private set => platformModelMaterial = value;
+            get => defaultControllerModelMaterial;
+            private set => defaultControllerModelMaterial = value;
         }
-
-        /// <summary>
-        /// The default controller model material when loading platform SDK controller models. This value is used as a fallback if no controller definition exists with a custom material type.
-        /// </summary>
-        [Obsolete("Use PlatformModelMaterial instead.")]
-        public Material DefaultControllerModelMaterial => platformModelMaterial;
 
         [SerializeField]
         [Tooltip("Override Left Controller Model.")]
@@ -203,11 +188,11 @@ namespace Microsoft.MixedReality.Toolkit.Input
             {
                 if (SettingContainsParameters(controllerVisualizationSettings[i], controllerType, hand))
                 {
-                    return controllerVisualizationSettings[i].UsePlatformModels;
+                    return controllerVisualizationSettings[i].UseDefaultModel;
                 }
             }
 
-            return usePlatformModels;
+            return useDefaultModels;
         }
 
         /// <summary>
@@ -222,11 +207,11 @@ namespace Microsoft.MixedReality.Toolkit.Input
             {
                 if (SettingContainsParameters(controllerVisualizationSettings[i], controllerType, hand))
                 {
-                    return controllerVisualizationSettings[i].PlatformModelMaterial;
+                    return controllerVisualizationSettings[i].DefaultModelMaterial;
                 }
             }
 
-            return platformModelMaterial;
+            return defaultControllerModelMaterial;
         }
 
         private bool SettingContainsParameters(MixedRealityControllerVisualizationSetting setting, Type controllerType, Handedness hand)

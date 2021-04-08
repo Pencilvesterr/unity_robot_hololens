@@ -1,5 +1,5 @@
-﻿// Copyright (c) Microsoft Corporation.
-// Licensed under the MIT License. 
+﻿// Copyright (c) Microsoft Corporation. All rights reserved.
+// Licensed under the MIT License. See LICENSE in the project root for license information. 
 
 using Microsoft.MixedReality.Toolkit.Editor;
 using UnityEditor;
@@ -73,8 +73,7 @@ namespace Microsoft.MixedReality.Toolkit.SpatialAwareness.Editor
         /// <inheritdoc/>
         protected override IMixedRealityServiceConfiguration GetDataProviderConfiguration(int index)
         {
-            var profile = target as MixedRealitySpatialAwarenessSystemProfile;
-            var configurations = (profile != null) ? profile.ObserverConfigurations : null;
+            var configurations = (target as MixedRealitySpatialAwarenessSystemProfile)?.ObserverConfigurations;
             if (configurations != null && index >= 0 && index < configurations.Length)
             {
                 return configurations[index];

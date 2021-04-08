@@ -10,12 +10,12 @@ using UnityEngine;
  */
 namespace RosSharp.RosBridgeClient
 {
-    public class RobotCommandPublisher : UnityPublisher<MessageTypes.Std.Int16>
+    public class RobotCommandPublisher : UnityPublisher<MessageTypes.Std.UInt32>
     {
-        private List<MessageTypes.Std.Int16> message_queue;
-        public const int EXECUTE_TRIGGER = 1;
-        public const int STOP_TRIGGER = 2;
-        public const int READY_STATE_TRIGGER = 3;
+        private List<MessageTypes.Std.UInt32> message_queue;
+        public const uint EXECUTE_TRIGGER = 1;
+        public const uint STOP_TRIGGER = 2;
+        public const uint READY_STATE_TRIGGER = 3;
 
         protected override void Start()
         {
@@ -24,7 +24,7 @@ namespace RosSharp.RosBridgeClient
         }
         private void InitialisedMessage()
         {
-            message_queue = new List<MessageTypes.Std.Int16>();
+            message_queue = new List<MessageTypes.Std.UInt32>();
         }
         private void Update()
         {
@@ -37,10 +37,10 @@ namespace RosSharp.RosBridgeClient
                 message_queue.RemoveAt(0);
             }
         }
-        public void SendCommand(int data)
+        public void SendCommand(uint data)
         {
             Debug.Log("Command Added to Queue");
-            message_queue.Add(new MessageTypes.Std.Int16((short)data));
+            message_queue.Add(new MessageTypes.Std.UInt32(data));
         }
     }
 }

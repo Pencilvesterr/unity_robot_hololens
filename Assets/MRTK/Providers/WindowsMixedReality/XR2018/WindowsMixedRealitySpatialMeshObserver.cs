@@ -1,5 +1,5 @@
-﻿// Copyright (c) Microsoft Corporation.
-// Licensed under the MIT License.license information.
+﻿// Copyright (c) Microsoft Corporation. All rights reserved.
+// Licensed under the MIT License. See LICENSE in the project root for license information.
 
 using Microsoft.MixedReality.Toolkit.SpatialAwareness;
 using Microsoft.MixedReality.Toolkit.Utilities;
@@ -26,7 +26,7 @@ namespace Microsoft.MixedReality.Toolkit.WindowsMixedReality.SpatialAwareness
         "Profiles/DefaultMixedRealitySpatialAwarenessMeshObserverProfile.asset",
         "MixedRealityToolkit.SDK",
         true)]
-    [HelpURL("https://docs.microsoft.com/windows/mixed-reality/mrtk-unity/features/spatial-awareness/spatial-awareness-getting-started")]
+    [HelpURL("https://microsoft.github.io/MixedRealityToolkit-Unity/Documentation/SpatialAwareness/SpatialAwarenessGettingStarted.html")]
     public class WindowsMixedRealitySpatialMeshObserver :
         BaseSpatialMeshObserver,
         IMixedRealityCapabilityCheck
@@ -125,7 +125,6 @@ namespace Microsoft.MixedReality.Toolkit.WindowsMixedReality.SpatialAwareness
                     break;
 
                 case SpatialAwarenessMeshLevelOfDetail.Fine:
-                case SpatialAwarenessMeshLevelOfDetail.Unlimited:
                     triangleDensity = 2000;
                     break;
 
@@ -176,13 +175,6 @@ namespace Microsoft.MixedReality.Toolkit.WindowsMixedReality.SpatialAwareness
                     UnityEditor.PlayerSettings.WSACapability.SpatialPerception,
                     this.GetType());
 #endif
-            // If we aren't using a HoloLens or there isn't an XR device present, return.
-            if (observer == null || HolographicSettings.IsDisplayOpaque || !XRDevice.isPresent) { return; }
-
-            if (RuntimeSpatialMeshPrefab != null)
-            {
-                AddRuntimeSpatialMeshPrefabToHierarchy();
-            }
         }
 
         private static readonly ProfilerMarker UpdatePerfMarker = new ProfilerMarker("[MRTK] WindowsMixedRealitySpatialMeshObserver.Update");
@@ -192,7 +184,6 @@ namespace Microsoft.MixedReality.Toolkit.WindowsMixedReality.SpatialAwareness
         {
             using (UpdatePerfMarker.Auto())
             {
-                base.Update();
                 UpdateObserver();
             }
         }
@@ -418,9 +409,6 @@ namespace Microsoft.MixedReality.Toolkit.WindowsMixedReality.SpatialAwareness
                 {
                     Pose worldFromPlayspace = new Pose(MixedRealityPlayspace.Position, MixedRealityPlayspace.Rotation);
                     Pose anchorPose = new Pose(transform.position, transform.rotation);
-                    /// Propagate any global scale on the playspace into the position.
-                    Vector3 playspaceScale = MixedRealityPlayspace.Transform.lossyScale;
-                    anchorPose.position *= playspaceScale.x; 
                     Pose parentPose = Concatenate(worldFromPlayspace, anchorPose);
                     transform.parent.position = parentPose.position;
                     transform.parent.rotation = parentPose.rotation;
@@ -428,7 +416,7 @@ namespace Microsoft.MixedReality.Toolkit.WindowsMixedReality.SpatialAwareness
             }
         }
 
-        private static readonly ProfilerMarker RequestMeshPerfMarker = new ProfilerMarker("[MRTK] WindowsMixedRealitySpatialMeshObserver.RequestMesh");
+        private static readonly ProfilerMarker RequestMeshPerfMarker = new ProfilerMarker("[MRTK] WindowsMixedRealitySpatialMeshObserver+PlayspaceAdapter.RequestMesh");
 
         /// <summary>
         /// Issue a request to the Surface Observer to begin baking the mesh.
@@ -503,7 +491,7 @@ namespace Microsoft.MixedReality.Toolkit.WindowsMixedReality.SpatialAwareness
             }
         }
 
-        private static readonly ProfilerMarker RemoveMeshObjectPerfMarker = new ProfilerMarker("[MRTK] WindowsMixedRealitySpatialMeshObserver.RemoveMeshObject");
+        private static readonly ProfilerMarker RemoveMeshObjectPerfMarker = new ProfilerMarker("[MRTK] WindowsMixedRealitySpatialMeshObserver+PlayspaceAdapter.RemoveMeshObject");
 
         /// <summary>
         /// Removes the <see cref="SpatialAwarenessMeshObject"/> associated with the specified id.
@@ -529,7 +517,7 @@ namespace Microsoft.MixedReality.Toolkit.WindowsMixedReality.SpatialAwareness
             }
         }
 
-        private static readonly ProfilerMarker ReclaimMeshObjectPerfMarker = new ProfilerMarker("[MRTK] WindowsMixedRealitySpatialMeshObserver.ReclaimMeshObject");
+        private static readonly ProfilerMarker ReclaimMeshObjectPerfMarker = new ProfilerMarker("[MRTK] WindowsMixedRealitySpatialMeshObserver+PlayspaceAdapter.ReclaimMeshObject");
 
         /// <summary>
         /// Reclaims the <see cref="SpatialAwarenessMeshObject"/> to allow for later reuse.
@@ -558,7 +546,7 @@ namespace Microsoft.MixedReality.Toolkit.WindowsMixedReality.SpatialAwareness
             }
         }
 
-        private static readonly ProfilerMarker ConfigureObserverVolumePerfMarker = new ProfilerMarker("[MRTK] WindowsMixedRealitySpatialMeshObserver.ConfigureObserverVolume");
+        private static readonly ProfilerMarker ConfigureObserverVolumePerfMarker = new ProfilerMarker("[MRTK] WindowsMixedRealitySpatialMeshObserver+PlayspaceAdapter.ConfigureObserverVolume");
 
         /// <summary>
         /// Applies the configured observation extents.
@@ -604,7 +592,7 @@ namespace Microsoft.MixedReality.Toolkit.WindowsMixedReality.SpatialAwareness
             }
         }
 
-        private static readonly ProfilerMarker OnSurfaceChangedPerfMarker = new ProfilerMarker("[MRTK] WindowsMixedRealitySpatialMeshObserver.SurfaceObserver_OnSurfaceChanged");
+        private static readonly ProfilerMarker OnSurfaceChangedPerfMarker = new ProfilerMarker("[MRTK] WindowsMixedRealitySpatialMeshObserver+PlayspaceAdapter.SurfaceObserver_OnSurfaceChanged");
 
         /// <summary>
         /// Handles the SurfaceObserver's OnSurfaceChanged event.
@@ -633,7 +621,7 @@ namespace Microsoft.MixedReality.Toolkit.WindowsMixedReality.SpatialAwareness
             }
         }
 
-        private static readonly ProfilerMarker OnDataReadyPerfMarker = new ProfilerMarker("[MRTK] WindowsMixedRealitySpatialMeshObserver.SurfaceObserver_OnDataReady");
+        private static readonly ProfilerMarker OnDataReadyPerfMarker = new ProfilerMarker("[MRTK] WindowsMixedRealitySpatialMeshObserver+PlayspaceAdapter.SurfaceObserver_OnDataReady");
 
         /// <summary>
         /// Handles the SurfaceObserver's OnDataReady event.
@@ -665,20 +653,19 @@ namespace Microsoft.MixedReality.Toolkit.WindowsMixedReality.SpatialAwareness
                 meshObject.Id = cookedData.id.handle;
                 outstandingMeshObject = null;
 
-                // Check to see if this is a new or updated mesh.
-                bool isMeshUpdate = meshes.ContainsKey(meshObject.Id);
-
-                // We presume that if the display option is not occlusion, that we should 
-                // default to the visible material. 
-                // Note: We check explicitly for a display option of none later in this method.
-                Material material = (DisplayOption == SpatialAwarenessMeshDisplayOptions.Occlusion) ?
-                    OcclusionMaterial : VisibleMaterial;
-
-                // If this is a mesh update, we want to preserve the mesh's previous material.
-                material = isMeshUpdate ? meshes[meshObject.Id].Renderer.sharedMaterial : material;
-
-                // Apply the appropriate material.
-                meshObject.Renderer.sharedMaterial = material;
+                // Apply the appropriate material to the mesh.
+                SpatialAwarenessMeshDisplayOptions displayOption = DisplayOption;
+                if (displayOption != SpatialAwarenessMeshDisplayOptions.None)
+                {
+                    meshObject.Renderer.enabled = true;
+                    meshObject.Renderer.sharedMaterial = (displayOption == SpatialAwarenessMeshDisplayOptions.Visible) ?
+                        VisibleMaterial :
+                        OcclusionMaterial;
+                }
+                else
+                {
+                    meshObject.Renderer.enabled = false;
+                }
 
                 // Recalculate the mesh normals if requested.
                 if (RecalculateNormals)
@@ -686,31 +673,22 @@ namespace Microsoft.MixedReality.Toolkit.WindowsMixedReality.SpatialAwareness
                     meshObject.Filter.sharedMesh.RecalculateNormals();
                 }
 
-                // Check to see if the display option is set to none. If so, we disable
-                // the renderer.
-                meshObject.Renderer.enabled = (DisplayOption != SpatialAwarenessMeshDisplayOptions.None);
-                
-                // Set the physics material
-                if (meshObject.Renderer.enabled)
-                {
-                    meshObject.Collider.material = PhysicsMaterial;
-                }
-
                 // Add / update the mesh to our collection
-                if (isMeshUpdate)
+                bool sendUpdatedEvent = false;
+                if (meshes.ContainsKey(cookedData.id.handle))
                 {
                     // Reclaim the old mesh object for future use.
-                    ReclaimMeshObject(meshes[meshObject.Id]);
-                    meshes.Remove(meshObject.Id);
+                    ReclaimMeshObject(meshes[cookedData.id.handle]);
+                    meshes.Remove(cookedData.id.handle);
+
+                    sendUpdatedEvent = true;
                 }
-                meshes.Add(meshObject.Id, meshObject);
+                meshes.Add(cookedData.id.handle, meshObject);
 
-                // Preserve local transform relative to parent.
-                meshObject.GameObject.transform.SetParent(ObservedObjectParent != null ?
-                    ObservedObjectParent.transform: null, false);
+                meshObject.GameObject.transform.parent = (ObservedObjectParent.transform != null) ? ObservedObjectParent.transform : null;
 
-                meshEventData.Initialize(this, meshObject.Id, meshObject);
-                if (isMeshUpdate)
+                meshEventData.Initialize(this, cookedData.id.handle, meshObject);
+                if (sendUpdatedEvent)
                 {
                     SpatialAwarenessSystem?.HandleEvent(meshEventData, OnMeshUpdated);
                 }
@@ -720,7 +698,6 @@ namespace Microsoft.MixedReality.Toolkit.WindowsMixedReality.SpatialAwareness
                 }
             }
         }
-
 #endif // UNITY_WSA
 
         #endregion Helpers

@@ -1,6 +1,7 @@
-﻿// Copyright (c) Microsoft Corporation.
-// Licensed under the MIT License.
+﻿// Copyright (c) Microsoft Corporation. All rights reserved.
+// Licensed under the MIT License. See LICENSE in the project root for license information.
 
+using System;
 using UnityEngine;
 
 namespace Microsoft.MixedReality.Toolkit.Examples.Demos
@@ -18,8 +19,15 @@ namespace Microsoft.MixedReality.Toolkit.Examples.Demos
         {
             Debug.Log($"LaunchUri: Launching {uri}");
 
-#if UNITY_WSA
-            UnityEngine.WSA.Launcher.LaunchUri(uri, false);
+#if WINDOWS_UWP
+            UnityEngine.WSA.Application.InvokeOnUIThread(async () =>
+            {
+                bool result = await global::Windows.System.Launcher.LaunchUriAsync(new System.Uri(uri));
+                if (!result)
+                {
+                    Debug.LogError("Launching URI failed to launch.");
+                }
+            }, false);
 #else
             Application.OpenURL(uri);
 #endif

@@ -1,4 +1,4 @@
-﻿// Copyright (c) Microsoft Corporation.
+﻿// Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 
 using System;
@@ -13,7 +13,7 @@ namespace Microsoft.MixedReality.Toolkit.Utilities
     /// the "MixedRealityToolkit/Standard" shader "_ProximityLight" feature.
     /// </summary>
     [ExecuteInEditMode]
-    [HelpURL("https://docs.microsoft.com/windows/mixed-reality/mrtk-unity/features/rendering/proximity-light")]
+    [HelpURL("https://microsoft.github.io/MixedRealityToolkit-Unity/Documentation/Rendering/ProximityLight.html")]
     [AddComponentMenu("Scripts/MRTK/Core/ProximityLight")]
     public class ProximityLight : MonoBehaviour
     {

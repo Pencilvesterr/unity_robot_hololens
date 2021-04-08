@@ -1,5 +1,5 @@
-// Copyright (c) Microsoft Corporation.
-// Licensed under the MIT License.
+// Copyright (c) Microsoft Corporation. All rights reserved.
+// Licensed under the MIT License. See LICENSE in the project root for license information.
 
 using Microsoft.MixedReality.Toolkit.Utilities;
 using System;
@@ -99,7 +99,7 @@ namespace Microsoft.MixedReality.Toolkit.UI
             get => backgroundBar;
             set => backgroundBar = value;
         }
-
+        
         [Header("States")]
 
         [Tooltip("The AppBar's display type; default is Manipulation")]
@@ -373,7 +373,8 @@ namespace Microsoft.MixedReality.Toolkit.UI
         protected virtual void OnClickRemove()
         {
             // Set the app bar and bounding box to inactive
-            if (Target is IBoundsTargetProvider boundsProvider && !boundsProvider.IsNull())
+            var boundsProvider = Target as IBoundsTargetProvider;
+            if (boundsProvider != null)
             {
                 boundsProvider.Target.SetActive(false);
             }
@@ -422,7 +423,15 @@ namespace Microsoft.MixedReality.Toolkit.UI
             {
                 AppBarButton button = buttons[i];
 
-                button.SetVisible(GetButtonVisible(button.ButtonType));
+                switch (button.ButtonType)
+                {
+                    case ButtonTypeEnum.Custom:
+                        break;
+
+                    default:
+                        button.SetVisible(GetButtonVisible(button.ButtonType));
+                        break;
+                }
 
                 if (!buttons[i].Visible)
                 {
@@ -460,7 +469,8 @@ namespace Microsoft.MixedReality.Toolkit.UI
 
         private void UpdateTargetObject()
         {
-            if (!(Target is IBoundsTargetProvider boundsProvider) || boundsProvider.IsNull() || boundsProvider.Target == null)
+            var boundsProvider = Target as IBoundsTargetProvider;
+            if (boundsProvider == null || boundsProvider.Target == null)
             {
                 if (DisplayType == AppBarDisplayTypeEnum.Manipulation)
                 {
@@ -495,10 +505,9 @@ namespace Microsoft.MixedReality.Toolkit.UI
 
         private void FollowTargetObject(bool smooth)
         {
-            if (!(Target is IBoundsTargetProvider boundsProvider) || boundsProvider.IsNull())
-            {
+            var boundsProvider = Target as IBoundsTargetProvider;
+            if (boundsProvider == null)
                 return;
-            }
 
             // Calculate the best follow position
             Vector3 finalPosition = Vector3.zero;
@@ -575,7 +584,7 @@ namespace Microsoft.MixedReality.Toolkit.UI
                 case AppBarStateEnum.Hidden:
                     switch (buttonType)
                     {
-                        // Show the show button
+                        // Show show button
                         // The rest are hidden
                         case ButtonTypeEnum.Show:
                             return true;

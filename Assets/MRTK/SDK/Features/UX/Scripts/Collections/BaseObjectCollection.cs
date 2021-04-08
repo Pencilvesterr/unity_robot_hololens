@@ -1,5 +1,5 @@
-﻿// Copyright (c) Microsoft Corporation.
-// Licensed under the MIT License.
+﻿// Copyright (c) Microsoft Corporation. All rights reserved.
+// Licensed under the MIT License. See LICENSE in the project root for license information.
 
 using System;
 using System.Collections.Generic;
@@ -24,14 +24,6 @@ namespace Microsoft.MixedReality.Toolkit.Utilities
         protected List<ObjectCollectionNode> NodeList
         {
             get { return nodeList; }
-        }
-
-        /// <summary>
-        /// Read only list of objects with generated data on the object.
-        /// </summary>
-        public IReadOnlyList<ObjectCollectionNode> NodeListReadOnly
-        {
-            get { return nodeList.AsReadOnly<ObjectCollectionNode>(); }
         }
 
         [Tooltip("Whether to include space for inactive transforms in the layout")]
@@ -168,7 +160,7 @@ namespace Microsoft.MixedReality.Toolkit.Utilities
         /// <param name="node">The Transform belonging to <see cref="ObjectCollectionNode"/></param>
         /// <param name="nodeIndex">The index of the element in <see cref="NodeList"/></param>
         /// <returns>true when <paramref name="node"/> belongs to an element of the list.</returns>
-        public bool ContainsNode(Transform node, out int nodeIndex)
+        protected bool ContainsNode(Transform node, out int nodeIndex)
         {
             nodeIndex = 0;
             if (node == null)

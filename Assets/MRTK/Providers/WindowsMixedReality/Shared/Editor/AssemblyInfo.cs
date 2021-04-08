@@ -1,7 +1,10 @@
-// Copyright (c) Microsoft Corporation.
+﻿// Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
-[assembly: System.Reflection.AssemblyVersion("2.6.1.0")]
-[assembly: System.Reflection.AssemblyFileVersion("2.6.1.0")]
 
-[assembly: System.Reflection.AssemblyProduct("Microsoft® Mixed Reality Toolkit Providers")]
-[assembly: System.Reflection.AssemblyCopyright("Copyright © Microsoft Corporation")]
+using System.Reflection;
+
+[assembly: AssemblyVersion("2.4.0.0")]
+[assembly: AssemblyFileVersion("2.4.0.0")]
+
+[assembly: AssemblyProduct("Microsoft® Mixed Reality Toolkit Providers")]
+[assembly: AssemblyCopyright("Copyright © Microsoft Corporation")]

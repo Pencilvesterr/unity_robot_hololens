@@ -1,5 +1,5 @@
-﻿// Copyright (c) Microsoft Corporation.
-// Licensed under the MIT License.
+﻿// Copyright (c) Microsoft Corporation. All rights reserved.
+// Licensed under the MIT License. See LICENSE in the project root for license information.
 
 using Microsoft.MixedReality.Toolkit.Physics;
 using Microsoft.MixedReality.Toolkit.Utilities;
@@ -16,9 +16,9 @@ namespace Microsoft.MixedReality.Toolkit.Input
     /// The focus provider handles the focused objects per input source.
     /// </summary>
     /// <remarks>There are convenience properties for getting only Gaze Pointer if needed.</remarks>
-    [HelpURL("https://docs.microsoft.com/windows/mixed-reality/mrtk-unity/features/input/overview")]
-    public class FocusProvider : BaseCoreSystem,
-        IMixedRealityFocusProvider,
+    [HelpURL("https://microsoft.github.io/MixedRealityToolkit-Unity/Documentation/Input/Overview.html")]
+    public class FocusProvider : BaseCoreSystem, 
+        IMixedRealityFocusProvider, 
         IPointerPreferences
     {
         /// <summary>
@@ -241,7 +241,7 @@ namespace Microsoft.MixedReality.Toolkit.Input
                 raycastHit = hit;
                 graphicsRaycastResult = default(RaycastResult);
 
-                hitObject = focusIndividualCompoundCollider ? hit.collider.gameObject : hit.transform.gameObject;
+                hitObject = focusIndividualCompoundCollider? hit.collider.gameObject : hit.transform.gameObject;
                 hitPointOnObject = hit.point;
                 hitNormalOnObject = hit.normal;
 
@@ -514,8 +514,6 @@ namespace Microsoft.MixedReality.Toolkit.Input
         {
             if (!IsSetupValid) { return; }
 
-            base.Initialize();
-
             if (Application.isPlaying)
             {
                 Debug.Assert(uiRaycastCamera == null);
@@ -542,11 +540,8 @@ namespace Microsoft.MixedReality.Toolkit.Input
             {
                 primaryPointerSelector.Destroy();
             }
-            if (!MixedRealityToolkit.Instance.IsProfileSwitching)
-            {
-                CleanUpUiRaycastCamera();
-            }
 
+            CleanUpUiRaycastCamera();
             base.Destroy();
         }
 
@@ -558,8 +553,6 @@ namespace Microsoft.MixedReality.Toolkit.Input
             using (UpdatePerfMarker.Auto())
             {
                 if (!IsSetupValid) { return; }
-
-                base.Update();
 
                 UpdatePointers();
                 UpdateGazeProvider();
@@ -805,9 +798,6 @@ namespace Microsoft.MixedReality.Toolkit.Input
                     try
                     {
                         // First, try to use constructor used by DefaultPointerMediator (it takes a IPointePreferences)
-                        // This is a deprecated constructor - the method of passing the pointer preferences through a non
-                        // default constructor is a loose contract that breaks pointer preferences because it becomes extremely
-                        // unclear why the class never gets passed a pointer preferences object.
                         mediator = Activator.CreateInstance(mediatorType, this) as IMixedRealityPointerMediator;
                     }
                     catch (MissingMethodException)
@@ -815,8 +805,6 @@ namespace Microsoft.MixedReality.Toolkit.Input
                         // We are using custom mediator not provided by MRTK, instantiate with empty constructor
                         mediator = Activator.CreateInstance(mediatorType) as IMixedRealityPointerMediator;
                     }
-
-                    mediator.SetPointerPreferences(this);
                 }
 
                 if (mediator != null)
@@ -896,9 +884,10 @@ namespace Microsoft.MixedReality.Toolkit.Input
         public IEnumerable<T> GetPointers<T>() where T : class, IMixedRealityPointer
         {
             List<T> typePointers = new List<T>();
-            foreach (PointerData pointer in pointers.Values)
+            foreach (var pointer in pointers.Values)
             {
-                if (pointer.Pointer is T typePointer && !typePointer.IsNull())
+                T typePointer = pointer.Pointer as T;
+                if (typePointer != null)
                 {
                     typePointers.Add(typePointer);
                 }
@@ -1166,7 +1155,7 @@ namespace Microsoft.MixedReality.Toolkit.Input
 
                 foreach (var pointerData in pointers.Values)
                 {
-                    if (pointerData.Pointer is IMixedRealityNearPointer nearPointer && !nearPointer.IsNull())
+                    if (pointerData.Pointer is IMixedRealityNearPointer nearPointer)
                     {
                         if (nearPointer.IsInteractionEnabled || nearPointer.IsNearObject)
                         {
@@ -1292,7 +1281,6 @@ namespace Microsoft.MixedReality.Toolkit.Input
                                     for (int colliderIndex = 0; colliderIndex < numColliders; colliderIndex++)
                                     {
                                         Collider collider = colliders[colliderIndex];
-
                                         // Policy: in order for an collider to be near interactable it must have
                                         // a NearInteractionGrabbable component on it.
                                         // FIXME: This is assuming only the grab pointer is using SceneQueryType.SphereOverlap,
@@ -1302,18 +1290,13 @@ namespace Microsoft.MixedReality.Toolkit.Input
                                         {
                                             continue;
                                         }
-
                                         // From https://docs.unity3d.com/ScriptReference/Collider.ClosestPoint.html
                                         // If location is in the collider the closestPoint will be inside.
-                                        // FIXME: this implementation is heavily flawed for determining the closest collider
-                                        // because the distance to the closest point is always 0 when the point is inside
-                                        // the collider (the closest point from x to the collider is x itself.) 
-                                        // This breaks cases like when 2 overlapping objects are selectable. We need to 
+                                        // FIXME: this implementation is heavily flawed because the distance to the closest point is always 0 when the
+                                        // point is inside the collider. This breaks cases like when 2 overlapping objects are selectable. We need to 
                                         // address these cases with a smarter approach in the future.
                                         //        See github issue https://github.com/microsoft/MixedRealityToolkit-Unity/issues/7629
                                         Vector3 closestPointToCollider = collider.ClosestPoint(testPoint);
-
-                                        // Keep track of the object closest to the test point.
                                         float distance = (testPoint - closestPointToCollider).sqrMagnitude;
                                         if (distance < closestDistance)
                                         {
@@ -1605,7 +1588,7 @@ namespace Microsoft.MixedReality.Toolkit.Input
             }
 
             return GetPointerBehavior(
-                pointer.GetType(),
+                pointer.GetType(), 
                 pointer.Controller.ControllerHandedness,
                 pointer.InputSourceParent.SourceType);
         }
@@ -1693,7 +1676,7 @@ namespace Microsoft.MixedReality.Toolkit.Input
                 return PointerBehavior.Default;
             }
             public void SetBehaviorForHandedness(
-                Handedness h,
+                Handedness h, 
                 PointerBehavior b)
             {
                 if ((h & Handedness.Right) != 0)

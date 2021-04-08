@@ -1,5 +1,5 @@
-// Copyright (c) Microsoft Corporation.
-// Licensed under the MIT License.
+// Copyright (c) Microsoft Corporation. All rights reserved.
+// Licensed under the MIT License. See LICENSE in the project root for license information.
 
 
 namespace Microsoft.MixedReality.Toolkit.Diagnostics
@@ -18,8 +18,8 @@ namespace Microsoft.MixedReality.Toolkit.Diagnostics
         /// Enable / disable diagnostic display.
         /// </summary>
         /// <remarks>
-        /// <para>When set to true, visibility settings for individual diagnostics are honored. When set to false,
-        /// all visualizations are hidden.</para>
+        /// When set to true, visibility settings for individual diagnostics are honored. When set to false,
+        /// all visualizations are hidden.
         /// </remarks>
         bool ShowDiagnostics { get; set; }
 

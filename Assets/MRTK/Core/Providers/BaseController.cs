@@ -1,5 +1,5 @@
-﻿// Copyright (c) Microsoft Corporation.
-// Licensed under the MIT License.
+﻿// Copyright (c) Microsoft Corporation. All rights reserved.
+// Licensed under the MIT License. See LICENSE in the project root for license information.
 
 using Microsoft.MixedReality.Toolkit.Utilities;
 using System;
@@ -15,18 +15,12 @@ namespace Microsoft.MixedReality.Toolkit.Input
         /// <summary>
         /// Constructor.
         /// </summary>
-        protected BaseController(
-            TrackingState trackingState,
-            Handedness controllerHandedness,
-            IMixedRealityInputSource inputSource = null,
-            MixedRealityInteractionMapping[] interactions = null,
-            IMixedRealityInputSourceDefinition definition = null)
+        protected BaseController(TrackingState trackingState, Handedness controllerHandedness, IMixedRealityInputSource inputSource = null, MixedRealityInteractionMapping[] interactions = null)
         {
             TrackingState = trackingState;
             ControllerHandedness = controllerHandedness;
             InputSource = inputSource;
             Interactions = interactions;
-            Definition = definition;
 
             IsPositionAvailable = false;
             IsPositionApproximate = false;
@@ -102,37 +96,17 @@ namespace Microsoft.MixedReality.Toolkit.Input
         /// <summary>
         /// The default interactions for this controller.
         /// </summary>
-        public virtual MixedRealityInteractionMapping[] DefaultInteractions => BuildInteractions(Definition?.GetDefaultMappings(ControllerHandedness));
+        public virtual MixedRealityInteractionMapping[] DefaultInteractions { get; } = null;
 
         /// <summary>
-        /// The default left-handed interactions for this controller.
+        /// The Default Left Handed interactions for this controller.
         /// </summary>
-        public virtual MixedRealityInteractionMapping[] DefaultLeftHandedInteractions => BuildInteractions(Definition?.GetDefaultMappings(Handedness.Left));
+        public virtual MixedRealityInteractionMapping[] DefaultLeftHandedInteractions { get; } = null;
 
         /// <summary>
-        /// The default right-handed interactions for this controller.
+        /// The Default Right Handed interactions for this controller.
         /// </summary>
-        public virtual MixedRealityInteractionMapping[] DefaultRightHandedInteractions => BuildInteractions(Definition?.GetDefaultMappings(Handedness.Right));
-
-        private MixedRealityInteractionMapping[] BuildInteractions(System.Collections.Generic.IReadOnlyList<MixedRealityInputActionMapping> definitionInteractions)
-        {
-            if (definitionInteractions == null)
-            {
-                return null;
-            }
-
-            MixedRealityInteractionMapping[] defaultInteractions = new MixedRealityInteractionMapping[definitionInteractions.Count];
-            for (int i = 0; i < definitionInteractions.Count; i++)
-            {
-                defaultInteractions[i] = new MixedRealityInteractionMapping((uint)i, definitionInteractions[i]);
-            }
-            return defaultInteractions;
-        }
-
-        /// <summary>
-        /// Represents the archetypal definition of what this controller supports and can perform.
-        /// </summary>
-        protected virtual IMixedRealityInputSourceDefinition Definition { get; } = null;
+        public virtual MixedRealityInteractionMapping[] DefaultRightHandedInteractions { get; } = null;
 
         #region IMixedRealityController Implementation
 
@@ -245,6 +219,7 @@ namespace Microsoft.MixedReality.Toolkit.Input
             // If a specific controller template wants to override the global model, assign that instead.
             if (IsControllerMappingEnabled() &&
                 GetControllerVisualizationProfile() != null &&
+                inputSourceType == InputSourceType.Controller &&
                 !(GetControllerVisualizationProfile().GetUseDefaultModelsOverride(controllerType, ControllerHandedness)))
             {
                 controllerModel = GetControllerVisualizationProfile().GetControllerModelOverride(controllerType, ControllerHandedness);

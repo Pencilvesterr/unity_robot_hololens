@@ -1,5 +1,5 @@
-﻿// Copyright (c) Microsoft Corporation.
-// Licensed under the MIT License.
+﻿// Copyright (c) Microsoft Corporation. All rights reserved.
+// Licensed under the MIT License. See LICENSE in the project root for license information.
 
 using Microsoft.MixedReality.Toolkit.Utilities;
 
@@ -51,7 +51,8 @@ namespace Microsoft.MixedReality.Toolkit.Input
         {
             foreach (var detectedController in CoreServices.InputSystem.DetectedControllers)
             {
-                if (detectedController is T hand)
+                var hand = detectedController as T;
+                if (hand != null)
                 {
                     if (detectedController.ControllerHandedness.IsMatch(handedness))
                     {

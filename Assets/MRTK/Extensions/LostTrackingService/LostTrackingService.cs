@@ -1,23 +1,14 @@
-// Copyright (c) Microsoft Corporation.
-// Licensed under the MIT License.
+// Copyright (c) Microsoft Corporation. All rights reserved.
+// Licensed under the MIT License. See LICENSE in the project root for license information.
 
-using Microsoft.MixedReality.Toolkit.Utilities;
 using System;
 using Unity.Profiling;
 using UnityEngine;
+using Microsoft.MixedReality.Toolkit.Utilities;
 
-#if ARSUBSYSTEMS_ENABLED
-using System.Collections.Generic;
-using UnityEngine.XR.ARSubsystems;
-
-#if UNITY_2018
-using UnityEngine.Experimental;
-#endif // UNITY_2018
-#endif // ARSUBSYSTEMS_ENABLED
-
-#if UNITY_WSA && !UNITY_2020_1_OR_NEWER
+#if UNITY_WSA
 using UnityEngine.XR.WSA;
-#endif // UNITY_WSA && !UNITY_2020_1_OR_NEWER
+#endif
 
 namespace Microsoft.MixedReality.Toolkit.Extensions.Tracking
 {
@@ -56,9 +47,9 @@ namespace Microsoft.MixedReality.Toolkit.Extensions.Tracking
         /// <param name="profile">The service's configuration profile.</param>
         [Obsolete("This constructor is obsolete (registrar parameter is no longer required) and will be removed in a future version of the Microsoft Mixed Reality Toolkit.")]
         public LostTrackingService(
-            IMixedRealityServiceRegistrar registrar,
-            string name,
-            uint priority,
+            IMixedRealityServiceRegistrar registrar, 
+            string name, 
+            uint priority, 
             BaseMixedRealityProfile profile) : this(name, priority, profile)
         {
             Registrar = registrar;
@@ -71,8 +62,8 @@ namespace Microsoft.MixedReality.Toolkit.Extensions.Tracking
         /// <param name="priority">Service priority. Used to determine order of instantiation.</param>
         /// <param name="profile">The service's configuration profile.</param>
         public LostTrackingService(
-            string name,
-            uint priority,
+            string name, 
+            uint priority, 
             BaseMixedRealityProfile profile) : base(name, priority, profile)
         {
             this.profile = profile as LostTrackingServiceProfile;
@@ -81,58 +72,20 @@ namespace Microsoft.MixedReality.Toolkit.Extensions.Tracking
         /// <inheritdoc />
         public override void Initialize()
         {
-#if UNITY_WSA && !UNITY_2020_1_OR_NEWER
-            base.Initialize();
+#if UNITY_WSA
             WorldManager.OnPositionalLocatorStateChanged += OnPositionalLocatorStateChanged;
-#elif !ARSUBSYSTEMS_ENABLED
+#else
             Debug.LogWarning("This service is not supported on this platform.");
 #endif
         }
 
-#if ARSUBSYSTEMS_ENABLED
-        private UnityEngine.XR.ARSubsystems.TrackingState lastTrackingState = UnityEngine.XR.ARSubsystems.TrackingState.None;
-        private NotTrackingReason lastNotTrackingReason = NotTrackingReason.None;
-
-        private static readonly ProfilerMarker UpdatePerfMarker = new ProfilerMarker("[MRTK] LostTrackingService.Update");
-
-        /// <inheritdoc />
-        public override void Update()
-        {
-            using (UpdatePerfMarker.Auto())
-            {
-                XRSessionSubsystem sessionSubsystem = SessionSubsystem;
-                if (sessionSubsystem == null)
-                {
-                    return;
-                }
-
-                if (sessionSubsystem.trackingState == lastTrackingState && sessionSubsystem.notTrackingReason == lastNotTrackingReason)
-                {
-                    return;
-                }
-
-                base.Update();
-
-                // This combination of states is from the Windows XR Plugin docs, describing the combination when positional tracking is inhibited.
-                if (sessionSubsystem.trackingState == UnityEngine.XR.ARSubsystems.TrackingState.None && sessionSubsystem.notTrackingReason == NotTrackingReason.Relocalizing)
-                {
-                    SetTrackingLost(true);
-                }
-                else
-                {
-                    SetTrackingLost(false);
-                }
-
-                lastTrackingState = sessionSubsystem.trackingState;
-                lastNotTrackingReason = sessionSubsystem.notTrackingReason;
-            }
-        }
-#endif // ARSUBSYSTEMS_ENABLED
-
 #if UNITY_EDITOR
         /// <inheritdoc />
-        public void EditorSetTrackingLost(bool trackingLost) => SetTrackingLost(trackingLost);
-#endif // UNITY_EDITOR
+        public void EditorSetTrackingLost(bool trackingLost)
+        {
+            SetTrackingLost(trackingLost);
+        }
+#endif
 
         private static readonly ProfilerMarker DisableTrackingLostVisualPerfMarker = new ProfilerMarker("[MRTK] LostTrackingService.DisableTrackingLostVisual");
 
@@ -230,7 +183,7 @@ namespace Microsoft.MixedReality.Toolkit.Extensions.Tracking
             }
         }
 
-#if UNITY_WSA && !UNITY_2020_1_OR_NEWER
+#if UNITY_WSA
         private static readonly ProfilerMarker OnPositionLocatorStateChangedPerfMarker = new ProfilerMarker("[MRTK] LostTrackingService.OnPositionalLocatorStateChanged");
 
         private void OnPositionalLocatorStateChanged(PositionalLocatorState oldState, PositionalLocatorState newState)
@@ -249,35 +202,6 @@ namespace Microsoft.MixedReality.Toolkit.Extensions.Tracking
                 }
             }
         }
-#endif // UNITY_WSA && !UNITY_2020_1_OR_NEWER
-
-#if ARSUBSYSTEMS_ENABLED
-        private static XRSessionSubsystem sessionSubsystem = null;
-        private static readonly List<XRSessionSubsystem> XRSessionSubsystems = new List<XRSessionSubsystem>();
-
-        /// <summary>
-        /// The XR SDK display subsystem for the currently loaded XR plug-in.
-        /// </summary>
-        private static XRSessionSubsystem SessionSubsystem
-        {
-            get
-            {
-                if (sessionSubsystem == null || !sessionSubsystem.running)
-                {
-                    sessionSubsystem = null;
-                    SubsystemManager.GetInstances(XRSessionSubsystems);
-                    foreach (XRSessionSubsystem xrSessionSubsystem in XRSessionSubsystems)
-                    {
-                        if (xrSessionSubsystem.running)
-                        {
-                            sessionSubsystem = xrSessionSubsystem;
-                            break;
-                        }
-                    }
-                }
-                return sessionSubsystem;
-            }
-        }
-#endif // ARSUBSYSTEMS_ENABLED
+#endif
     }
 }

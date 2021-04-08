@@ -18,7 +18,7 @@ namespace Microsoft.MixedReality.Toolkit.XRSDK.WindowsMixedReality
         "XR SDK Windows Mixed Reality Spatial Mesh Observer",
         "Profiles/DefaultMixedRealitySpatialAwarenessMeshObserverProfile.asset",
         "MixedRealityToolkit.SDK")]
-    [HelpURL("https://docs.microsoft.com/windows/mixed-reality/mrtk-unity/features/spatial-awareness/spatial-awareness-getting-started")]
+    [HelpURL("https://microsoft.github.io/MixedRealityToolkit-Unity/Documentation/SpatialAwareness/SpatialAwarenessGettingStarted.html")]
     public class WindowsMixedRealitySpatialMeshObserver :
         GenericXRSDKSpatialMeshObserver,
         IMixedRealityCapabilityCheck
@@ -42,7 +42,7 @@ namespace Microsoft.MixedReality.Toolkit.XRSDK.WindowsMixedReality
         /// <inheritdoc/>
         protected override void ConfigureObserverVolume()
         {
-            if (SpatialAwarenessSystem == null || XRSubsystemHelpers.MeshSubsystem == null)
+            if (SpatialAwarenessSystem == null || XRSDKSubsystemHelpers.MeshSubsystem == null)
             {
                 return;
             }
@@ -53,16 +53,16 @@ namespace Microsoft.MixedReality.Toolkit.XRSDK.WindowsMixedReality
                 switch (ObserverVolumeType)
                 {
                     case VolumeType.AxisAlignedCube:
-                        XRSubsystemHelpers.MeshSubsystem.SetBoundingVolume(ObserverOrigin, ObservationExtents);
+                        XRSDKSubsystemHelpers.MeshSubsystem.SetBoundingVolume(ObserverOrigin, ObservationExtents);
                         break;
 #if WMR_ENABLED
                     case VolumeType.Sphere:
                         // We use the x value of the extents as the sphere radius
-                        XRSubsystemHelpers.MeshSubsystem.SetBoundingVolumeSphere(ObserverOrigin, ObservationExtents.x);
+                        XRSDKSubsystemHelpers.MeshSubsystem.SetBoundingVolumeSphere(ObserverOrigin, ObservationExtents.x);
                         break;
 
                     case VolumeType.UserAlignedCube:
-                        XRSubsystemHelpers.MeshSubsystem.SetBoundingVolumeOrientedBox(ObserverOrigin, ObservationExtents, ObserverRotation);
+                        XRSDKSubsystemHelpers.MeshSubsystem.SetBoundingVolumeOrientedBox(ObserverOrigin, ObservationExtents, ObserverRotation);
                         break;
 #endif // WMR_ENABLED
                     default:

@@ -1,13 +1,12 @@
-﻿// Copyright (c) Microsoft Corporation.
-// Licensed under the MIT License.
+﻿// Copyright (c) Microsoft Corporation. All rights reserved.
+// Licensed under the MIT License. See LICENSE in the project root for license information.
 
 using UnityEngine;
 
 namespace Microsoft.MixedReality.Toolkit.Experimental.Dwell
 {
     /// <summary>
-    /// Example to demonstrate DwellHandler override when a custom profile is used
-    /// This example script works with the DwellProfileWithDecay custom profile.
+    /// Example to demonstrate DwellHandler override
     /// </summary>
     [AddComponentMenu("Scripts/MRTK/Examples/CustomDwellHandler")]
     public class CustomDwellHandler : DwellHandler
@@ -17,18 +16,15 @@ namespace Microsoft.MixedReality.Toolkit.Experimental.Dwell
             switch (CurrentDwellState)
             {
                 case DwellStateType.DwellCanceled:
-                    if (dwellProfile is DwellProfileWithDecay profileWithDecay)
+                    var customDwellProfile = dwellProfile as DwellProfileWithDecay;
+                    if (customDwellProfile != null && customDwellProfile.AllowDwellDecayOnCancel)
                     {
-                        FillTimer -= Time.deltaTime * (float)dwellProfile.TimeToCompleteDwell.TotalSeconds / profileWithDecay.TimeToAllowDwellDecay;
-                        if (FillTimer <= 0)
-                        {
-                            FillTimer = 0;
-                            CurrentDwellState = DwellStateType.None;
-                        }
+                        FillTimer -= Time.deltaTime;
                     }
-                    else
+                    if (FillTimer <= 0)
                     {
-                        Debug.LogError("The assigned profile is not DwellProfileWithDecay!");
+                        FillTimer = 0;
+                        CurrentDwellState = DwellStateType.None;
                     }
                     break;
                 default:

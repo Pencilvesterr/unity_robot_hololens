@@ -1,5 +1,5 @@
-// Copyright (c) Microsoft Corporation.
-// Licensed under the MIT License.
+// Copyright (c) Microsoft Corporation. All rights reserved.
+// Licensed under the MIT License. See LICENSE in the project root for license information.
 
 using Microsoft.MixedReality.Toolkit.Boundary;
 using Microsoft.MixedReality.Toolkit.CameraSystem;
@@ -119,14 +119,6 @@ namespace Microsoft.MixedReality.Toolkit
         }
 
         /// <summary>
-        /// Gets first matching <see cref="Microsoft.MixedReality.Toolkit.CameraSystem.IMixedRealityCameraSettingsProvider"/> or extension thereof for CoreServices.CameraSystem
-        /// </summary>
-        public static T GetCameraSystemDataProvider<T>() where T : IMixedRealityCameraSettingsProvider
-        {
-            return GetDataProvider<T>(CameraSystem);
-        }
-
-        /// <summary>
         /// Gets first matching data provider of provided type T registered to the provided mixed reality service.
         /// </summary>
         /// <typeparam name="T">Type of data provider to return. Must implement and/or extend from <see cref="Microsoft.MixedReality.Toolkit.IMixedRealityDataProvider" /></typeparam>
@@ -136,7 +128,8 @@ namespace Microsoft.MixedReality.Toolkit
         /// </remarks>
         public static T GetDataProvider<T>(IMixedRealityService service) where T : IMixedRealityDataProvider
         {
-            if (service is IMixedRealityDataProviderAccess dataProviderAccess)
+            var dataProviderAccess = service as IMixedRealityDataProviderAccess;
+            if (dataProviderAccess != null)
             {
                 return dataProviderAccess.GetDataProvider<T>();
             }
@@ -152,11 +145,11 @@ namespace Microsoft.MixedReality.Toolkit
             Type serviceType = typeof(T);
 
             // See if we already have a WeakReference entry for this service type
-            if (serviceCache.TryGetValue(serviceType, out WeakReference<IMixedRealityService> weakService))
+            if (serviceCache.ContainsKey(serviceType))
             {
                 IMixedRealityService svc;
                 // If our reference object is still alive, return it
-                if (weakService.TryGetTarget(out svc))
+                if (serviceCache[serviceType].TryGetTarget(out svc))
                 {
                     return (T)svc;
                 }
@@ -172,7 +165,7 @@ namespace Microsoft.MixedReality.Toolkit
                 return default(T);
             }
 
-            serviceCache.Add(serviceType, new WeakReference<IMixedRealityService>(service, false));
+            serviceCache.Add(typeof(T), new WeakReference<IMixedRealityService>(service, false));
             return service;
         }
     }

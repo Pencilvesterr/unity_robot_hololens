@@ -53,4 +53,3 @@ MonoBehaviour:
     type: 2}
   useServiceInspectors: 1
   renderDepthBuffer: 0
-  enableVerboseLogging: 0
