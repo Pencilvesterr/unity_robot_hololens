@@ -14,6 +14,7 @@ namespace RosSharp.RosBridgeClient
 {
     class UnityStateSubscriber : UnitySubscriber<MessageTypes.Std.UInt32>
     {
+  
         // Six states being reported from the ROS side
         private const uint IDLE = 1;
         private const uint EXECUTING = 2;

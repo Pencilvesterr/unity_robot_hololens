@@ -10,13 +10,9 @@ using UnityEngine;
  */
 namespace RosSharp.RosBridgeClient
 {
-    public class SelectedCWSPublisher : UnityPublisher<MessageTypes.Std.Int16>
+    public class SelectedBlockPublisher : UnityPublisher<MessageTypes.Std.Int16>
     {
         private List<MessageTypes.Std.Int16> message_queue;
-        public const int HOME = 0;
-        public const int LEFT = 1;
-        public const int CENTRE = 2;
-        public const int RIGHT = 3;
 
         protected override void Start()
         {
@@ -38,9 +34,9 @@ namespace RosSharp.RosBridgeClient
                 message_queue.RemoveAt(0);
             }
         }
-        public void SendCommand(int data)
+        public void PublishSelection(int data)
         {
-            Debug.Log("Command Added to Queue");
+            Debug.Log("Command Added to Queue" + data.ToString());
             message_queue.Add(new MessageTypes.Std.Int16((short)data));
         }
     }
