@@ -7,7 +7,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: CwsSelected
+  m_Name: ObjectSelectedYellow
   m_Shader: {fileID: 4800000, guid: 5bdea20278144b11916d77503ba1467a, type: 3}
   m_ShaderKeywords: _ALPHABLEND_ON _DIRECTIONAL_LIGHT _DISABLE_ALBEDO_MAP _HOVER_LIGHT
     _INNER_GLOW _IRIDESCENCE _REFLECTIONS _REFRACTION _RIM_LIGHT _SPECULAR_HIGHLIGHTS
@@ -116,6 +116,7 @@ Material:
     - _IndependentCorners: 0
     - _InnerGlow: 1
     - _InnerGlowPower: 4.1
+    - _InstancedColor: 0
     - _Iridescence: 1
     - _IridescenceAngle: -0.78
     - _IridescenceIntensity: 0
