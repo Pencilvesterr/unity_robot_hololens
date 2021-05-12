@@ -51,11 +51,13 @@ namespace RosSharp.RosBridgeClient
         }
         void ProcessMessage()
         {
-            // Reset blocks to their default
-            current_zone.GetComponent<MeshRenderer>().material = default_material;
-            current_block.GetComponent<MeshRenderer>().material = default_material;
-
-
+            if (current_zone != null && current_block != null)
+            {
+                // Reset previous block/zone to their default
+                current_zone.GetComponent<MeshRenderer>().material = default_material;
+                current_block.GetComponent<MeshRenderer>().material = default_material;
+            }
+            
             // Find the objects
             for (int i = 0; i < highlightable_objects.Length; i++)
             {
