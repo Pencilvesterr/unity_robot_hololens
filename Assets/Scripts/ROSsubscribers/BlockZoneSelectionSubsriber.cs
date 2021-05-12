@@ -1,9 +1,5 @@
-﻿using RosSharp.RosBridgeClient.MessageTypes.Geometry;
-using RosSharp.RosBridgeClient.MessageTypes.Visualization;
-using RosSharp.RosBridgeClient.MessageTypes.Moveit;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿
+using RosSharp.RosBridgeClient.MessageTypes.CwsPlanning;
 using UnityEngine;
 
 /*
@@ -13,7 +9,7 @@ using UnityEngine;
 namespace RosSharp.RosBridgeClient
 {
     [RequireComponent(typeof(AudioSource))]
-    public class BlockZoneSelectionSubsriber : UnitySubscriber<MessageTypes.Moveit.TrafficLight>
+    public class BlockZoneSelectionSubsriber : UnitySubscriber<MessageTypes.CwsPlanning.TrafficLight>
     {
         AudioSource audio_source;
 
