@@ -36,7 +36,7 @@ namespace RosSharp.RosBridgeClient
         }
         public void PublishSelection(int data)
         {
-            Debug.Log("Command Added to Queue" + data.ToString());
+            Debug.Log("Command Added to Queue '/gaze_object_selection': " + data.ToString());
             message_queue.Add(new MessageTypes.Std.Int16((short)data));
         }
     }
