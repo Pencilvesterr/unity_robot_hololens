@@ -10,19 +10,16 @@ using UnityEngine;
  */
 namespace RosSharp.RosBridgeClient
 {
-    public class SelectedBlockPublisher : UnityPublisher<MessageTypes.Std.Int16>
+    public class SelectedBlockPublisher : UnityPublisher<MessageTypes.Std.Int32>
     {
-        private List<MessageTypes.Std.Int16> message_queue;
+        private List<MessageTypes.Std.Int32> message_queue;
 
         protected override void Start()
         {
             base.Start();
-            InitialisedMessage();
+            message_queue = new List<MessageTypes.Std.Int32>();
         }
-        private void InitialisedMessage()
-        {
-            message_queue = new List<MessageTypes.Std.Int16>();
-        }
+      
         private void Update()
         {
             // If there is message in the queue
@@ -37,7 +34,7 @@ namespace RosSharp.RosBridgeClient
         public void PublishSelection(int data)
         {
             Debug.Log("Command Added to Queue '/gaze_object_selection': " + data.ToString());
-            message_queue.Add(new MessageTypes.Std.Int16((short)data));
+            message_queue.Add(new MessageTypes.Std.Int32((short)data));
         }
     }
 }
