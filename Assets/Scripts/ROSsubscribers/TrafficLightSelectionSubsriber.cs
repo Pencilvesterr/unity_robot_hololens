@@ -1,6 +1,7 @@
 ﻿
 using RosSharp.RosBridgeClient.MessageTypes.CwsPlanning;
 using UnityEngine;
+using Microsoft.MixedReality.Toolkit.UI;
 
 /*
  * Written by Morgan Crouch 2020
@@ -9,7 +10,7 @@ using UnityEngine;
 namespace RosSharp.RosBridgeClient
 {
     [RequireComponent(typeof(AudioSource))]
-    public class BlockZoneSelectionSubsriber : UnitySubscriber<MessageTypes.CwsPlanning.TrafficLight>
+    public class TrafficLightSelectionSubsriber : UnitySubscriber<MessageTypes.CwsPlanning.TrafficLight>
     {
         AudioSource audio_source;
 
@@ -17,6 +18,9 @@ namespace RosSharp.RosBridgeClient
         public Material yellow_highlight;
         public Material red_highlight;
         public AudioClip transition_sound;
+
+        public GameObject ARRobotIntentButton;
+        private Interactable ToggleStatus;
 
         private int block_selected;
         private int block_status;
@@ -33,6 +37,7 @@ namespace RosSharp.RosBridgeClient
             base.Start();
             highlightable_objects = GameObject.FindGameObjectsWithTag("HighlightableObject");
             audio_source = GetComponent<AudioSource>();
+            ToggleStatus = ARRobotIntentButton.GetComponent<Interactable>();
             isMessageReceived = false;
         }
         protected override void ReceiveMessage(TrafficLight message)
@@ -46,17 +51,16 @@ namespace RosSharp.RosBridgeClient
         }
         private void Update()
         {
-            if (isMessageReceived)
-                ProcessMessage();
-        }
-        void ProcessMessage()
-        {
-            if (current_zone != null && current_block != null)
+            // TODO: Expand on this, and have so they're all hidden when it's toggled (will need it to trigger a function to reset all colour of zones
+            if (isMessageReceived && ToggleStatus.IsToggled)
             {
-                // Reset previous block/zone to their default
-                current_zone.GetComponent<MeshRenderer>().material = default_material;
-                current_block.GetComponent<MeshRenderer>().material = default_material;
+                ProcessMessage();
             }
+        }
+
+        private void ProcessMessage()
+        {
+            ResetRobotSelection();
             
             // Find the objects
             for (int i = 0; i < highlightable_objects.Length; i++)
@@ -93,6 +97,19 @@ namespace RosSharp.RosBridgeClient
             audio_source.PlayOneShot(transition_sound, 0.7F);
 
             isMessageReceived = false;
+        }
+
+        public void ResetRobotSelection()
+        {
+            if (!ToggleStatus.IsToggled)
+            {
+                if (current_zone != null && current_block != null)
+                {
+                    // Reset previous block/zone to their default
+                    current_zone.GetComponent<MeshRenderer>().material = default_material;
+                    current_block.GetComponent<MeshRenderer>().material = default_material;
+                }
+            }
         }
     }
 }

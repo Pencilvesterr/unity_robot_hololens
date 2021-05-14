@@ -1,35 +1,21 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using Microsoft.MixedReality.Toolkit.UI;
 using UnityEngine;
 
 public class ManagerBlocks : MonoBehaviour {
     // Tracks which block has been selected by the user and gives option to show rings or not
 
-    Dictionary<int, GameObject> BlockRings;
-    private bool showRings = true; //field
-    public bool ShowingRings // property
-    {
-        get { return showRings; }
-        set
-        {
-            if (value)
-            {
-                SelectionVisible();
-                showRings = value;
-            }
-            else
-            {
-                AllRingsInvisible();
-                showRings = value;
-            }
+    public GameObject RingVisibilityToggle;
+    private Interactable ToggleStatus;
 
-        }
-    }
+    private Dictionary<int, GameObject> BlockRings;
+
     public int SelectedBlock { get; set; } = -1;
-
 
     void Start()
     {
+        ToggleStatus = RingVisibilityToggle.GetComponent<Interactable>();
         BlockRings = new Dictionary<int, GameObject> { 
             {11, GameObject.Find("Ring 11")},
             {22, GameObject.Find("Ring 22")},
@@ -38,18 +24,6 @@ public class ManagerBlocks : MonoBehaviour {
 
         // Start all selection rings as invisible
         AllRingsInvisible();
-    }
-
-    public void SwitchRingVisibility()
-    {
-        if (ShowingRings)
-        {
-            ShowingRings = false;
-        }
-        else
-        {
-            ShowingRings = true;
-        }
     }
 
     public void SetGazeSelection(int block)
@@ -63,7 +37,7 @@ public class ManagerBlocks : MonoBehaviour {
             }
             SelectedBlock = block;
 
-            if (ShowingRings)
+            if (ToggleStatus.IsToggled)
             {
                 BlockRings[block].SetActive(true);
             }
@@ -82,9 +56,18 @@ public class ManagerBlocks : MonoBehaviour {
             entry.Value.SetActive(false);
         }
     }
+
+    public void ToggleRingVisibility()
+    {
+        if (ToggleStatus.IsToggled)
+        {
+            SelectionVisible();
+        }
+        else
+        {
+            AllRingsInvisible();
+        }
+    }
 }
 
  
-
-   
-

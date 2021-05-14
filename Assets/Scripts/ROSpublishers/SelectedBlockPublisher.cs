@@ -1,6 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Microsoft.MixedReality.Toolkit.UI;
+
 
 /*
  * Written by Steven Hoang 2020
@@ -13,11 +15,14 @@ namespace RosSharp.RosBridgeClient
     public class SelectedBlockPublisher : UnityPublisher<MessageTypes.Std.Int32>
     {
         private List<MessageTypes.Std.Int32> message_queue;
+        public GameObject PublishGazeToggle;
+        private Interactable PublishGazeToggleStatus;
 
         protected override void Start()
         {
             base.Start();
             message_queue = new List<MessageTypes.Std.Int32>();
+            PublishGazeToggleStatus = PublishGazeToggle.GetComponent<Interactable>();
         }
       
         private void Update()
@@ -33,8 +38,11 @@ namespace RosSharp.RosBridgeClient
         }
         public void PublishSelection(int data)
         {
-            Debug.Log("Command Added to Queue '/gaze_object_selection': " + data.ToString());
-            message_queue.Add(new MessageTypes.Std.Int32((short)data));
+            if (PublishGazeToggleStatus.IsToggled)
+            {
+                Debug.Log("Command Added to Queue '/gaze_object_selection': " + data.ToString());
+                message_queue.Add(new MessageTypes.Std.Int32((short)data));
+            }
         }
     }
 }
