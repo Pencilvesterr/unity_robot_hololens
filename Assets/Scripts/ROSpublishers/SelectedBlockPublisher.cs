@@ -23,11 +23,11 @@ namespace RosSharp.RosBridgeClient
             base.Start();
             message_queue = new List<MessageTypes.Std.Int32>();
             PublishGazeToggleStatus = PublishGazeToggle.GetComponent<Interactable>();
+            PublishGazeToggleStatus.IsToggled = true;
         }
       
         private void Update()
         {
-            // If there is message in the queue
             if (message_queue.Count > 0)
             {
                 // Publish the first message from queue

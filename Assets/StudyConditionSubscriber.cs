@@ -18,6 +18,8 @@ namespace RosSharp.RosBridgeClient
 
         private Interactable RobotIntentDisplayedToggle;
         private Interactable GazeSelectionPublishedToggle;
+        
+
 
         // 1: All, 2: Traffic Light Shown, 3: Eye Gaze Published, 4: None
         private int CurrentStudyCondition = 1;
@@ -61,8 +63,11 @@ namespace RosSharp.RosBridgeClient
                     break;
             }
 
+
             Debug.Log(string.Format("Robot intent displayed: {0}, Gaze Selection Published: {1}",
                 RobotIntentDisplayedToggle.IsToggled, GazeSelectionPublishedToggle.IsToggled));
+            
+            isMessageReceived = false;
         }
 
 

@@ -17,12 +17,9 @@ namespace RosSharp.RosBridgeClient
         protected override void Start()
         {
             base.Start();
-            InitialisedMessage();
-        }
-        private void InitialisedMessage()
-        {
             message_queue = new List<MessageTypes.Std.Int32>();
         }
+
         private void Update()
         {
             // If there is message in the queue

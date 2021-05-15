@@ -39,6 +39,7 @@ namespace RosSharp.RosBridgeClient
             audio_source = GetComponent<AudioSource>();
             ToggleStatus = ARRobotIntentButton.GetComponent<Interactable>();
             isMessageReceived = false;
+            ToggleStatus.IsToggled = true;
         }
         protected override void ReceiveMessage(TrafficLight message)
         {
@@ -58,10 +59,10 @@ namespace RosSharp.RosBridgeClient
             }
         }
 
+
+
         private void ProcessMessage()
-        {
-            ResetRobotSelection();
-            
+        {   
             // Find the objects
             for (int i = 0; i < highlightable_objects.Length; i++)
             {
@@ -76,7 +77,35 @@ namespace RosSharp.RosBridgeClient
             }
 
             // Update their colour based on the message's content
-            if (block_status == 1)
+           UpdateColour();
+
+            // Play transition noise
+            audio_source.PlayOneShot(transition_sound, 0.7F);
+
+            isMessageReceived = false;
+        }
+
+        public void UpdateRobotSelection()
+        {
+            if (current_zone == null || current_block == null)
+            {
+                return;
+            }
+            if (!ToggleStatus.IsToggled)
+            {
+                // Reset previous block/zone to their default
+                current_zone.GetComponent<MeshRenderer>().material = default_material;
+                current_block.GetComponent<MeshRenderer>().material = default_material;   
+            }
+            else
+            {
+                UpdateColour();
+            }
+        }
+
+        private void UpdateColour()
+        {
+             if (block_status == 1)
             {
                 current_block.GetComponent<MeshRenderer>().material = red_highlight;
             }
@@ -91,24 +120,6 @@ namespace RosSharp.RosBridgeClient
             else if (zone_status == 2)
             {
                 current_zone.GetComponent<MeshRenderer>().material = yellow_highlight;
-            }
-
-            // Play transition noise
-            audio_source.PlayOneShot(transition_sound, 0.7F);
-
-            isMessageReceived = false;
-        }
-
-        public void ResetRobotSelection()
-        {
-            if (!ToggleStatus.IsToggled)
-            {
-                if (current_zone != null && current_block != null)
-                {
-                    // Reset previous block/zone to their default
-                    current_zone.GetComponent<MeshRenderer>().material = default_material;
-                    current_block.GetComponent<MeshRenderer>().material = default_material;
-                }
             }
         }
     }

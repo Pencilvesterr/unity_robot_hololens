@@ -22,6 +22,8 @@ public class ManagerBlocks : MonoBehaviour {
             {33, GameObject.Find("Ring 33")}
         };
 
+        ToggleStatus.IsToggled = false;
+
         // Start all selection rings as invisible
         AllRingsInvisible();
     }
