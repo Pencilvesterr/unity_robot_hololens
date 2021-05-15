@@ -54,7 +54,10 @@ public class ManagerBlocks : MonoBehaviour {
 
     private void SelectionVisible()
     {
-        BlockRings[SelectedBlock].SetActive(true);
+        if (SelectedBlock != -1)
+        {
+            BlockRings[SelectedBlock].SetActive(true);
+        }
     }
 
     public void AllRingsInvisible()
