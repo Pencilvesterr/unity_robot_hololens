@@ -63,6 +63,12 @@ namespace RosSharp.RosBridgeClient
 
         private void ProcessMessage()
         {   
+            if (current_zone != null && current_block != null)
+            {
+                current_zone.GetComponent<MeshRenderer>().material = default_material;
+                current_block.GetComponent<MeshRenderer>().material = default_material; 
+            }
+
             // Find the objects
             for (int i = 0; i < highlightable_objects.Length; i++)
             {

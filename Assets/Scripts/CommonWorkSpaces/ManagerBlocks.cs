@@ -18,7 +18,13 @@ public class ManagerBlocks : MonoBehaviour {
         ToggleStatus = RingVisibilityToggle.GetComponent<Interactable>();
         BlockRings = new Dictionary<int, GameObject> { 
             {11, GameObject.Find("Ring 11")},
+            {12, GameObject.Find("Ring 12")},
+            {13, GameObject.Find("Ring 13")},
+            {21, GameObject.Find("Ring 21")},
             {22, GameObject.Find("Ring 22")},
+            {23, GameObject.Find("Ring 23")},
+            {31, GameObject.Find("Ring 31")},
+            {32, GameObject.Find("Ring 32")},
             {33, GameObject.Find("Ring 33")}
         };
 
