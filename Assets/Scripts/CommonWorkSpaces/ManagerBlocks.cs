@@ -20,12 +20,18 @@ public class ManagerBlocks : MonoBehaviour {
             {11, GameObject.Find("Ring 11")},
             {12, GameObject.Find("Ring 12")},
             {13, GameObject.Find("Ring 13")},
+            {14, GameObject.Find("Ring 14")},
+            {15, GameObject.Find("Ring 15")},
             {21, GameObject.Find("Ring 21")},
             {22, GameObject.Find("Ring 22")},
             {23, GameObject.Find("Ring 23")},
+            {24, GameObject.Find("Ring 24")},
+            {25, GameObject.Find("Ring 25")},
             {31, GameObject.Find("Ring 31")},
             {32, GameObject.Find("Ring 32")},
-            {33, GameObject.Find("Ring 33")}
+            {33, GameObject.Find("Ring 33")},
+            {34, GameObject.Find("Ring 34")},
+            {35, GameObject.Find("Ring 35")}
         };
 
         ToggleStatus.IsToggled = false;
