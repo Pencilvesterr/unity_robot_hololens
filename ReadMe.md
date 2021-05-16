@@ -1,7 +1,7 @@
-# Augmented Reality with Haptic Feedback and Virtual Barriers for improved HRI - Virtual Barrier system
+# Augmented Reality with Eye Gaze for a Joint Action Framework
 
 ## Introduction
-The repository contains the code used by Steven Lay and Steven Hoang for their Final Year Projects.
+The repository contains the code used by Morgan Crouch for their Final Year Projects.
 
 ## Prerequisites 
 * [Unity 2019.4 LTS](https://unity.com/releases/2019-lts)
@@ -23,3 +23,4 @@ The repository contains the code used by Steven Lay and Steven Hoang for their F
 12. Set Device to Device (Ensure Hololens is connected via USB to your Computer).
 13. Ensure the Hololens is not asleep/turned off, and then hit the 'Play' button beside the Device tab.
 14. Wait for the solution to build and it should be deployed and launched on your HoloLens when it's ready.
+15. Run the ROS nodes from Morgan's 'ROS CWS Planner' repo. This can be done with the command 'roslaunch cws_planner cws_nodes.launch'
