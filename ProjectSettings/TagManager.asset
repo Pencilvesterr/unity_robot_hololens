@@ -18,6 +18,7 @@ TagManager:
   - ZoneSelectionRing
   - HighlightableObject
   - SettingsButton
+  - PlacementButton
   layers:
   - Default
   - TransparentFX

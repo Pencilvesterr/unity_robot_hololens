@@ -15,9 +15,11 @@ namespace RosSharp.RosBridgeClient
     {
         public GameObject RobotIntentDisplayed;
         public GameObject GazeSelectionPublished;
+        public Material DefaultPlacementButtonMaterial;
 
         private Interactable RobotIntentDisplayedToggle;
         private Interactable GazeSelectionPublishedToggle;
+        private GameObject[] PlacementButtons;
         
 
 
@@ -29,6 +31,7 @@ namespace RosSharp.RosBridgeClient
             base.Start();
             RobotIntentDisplayedToggle = RobotIntentDisplayed.GetComponent<Interactable>();
             GazeSelectionPublishedToggle = GazeSelectionPublished.GetComponent<Interactable>();
+            PlacementButtons = GameObject.FindGameObjectsWithTag("PlacementButton");
 
             isMessageReceived = false;
         }
@@ -75,6 +78,11 @@ namespace RosSharp.RosBridgeClient
         {
             CurrentStudyCondition = message.data;
             isMessageReceived = true;
+
+            foreach (GameObject placementButton in PlacementButtons)
+            {
+                placementButton.GetComponent<MeshRenderer>().material = DefaultPlacementButtonMaterial;
+            }
         }
     }
 }
