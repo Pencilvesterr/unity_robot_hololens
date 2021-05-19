@@ -66,6 +66,11 @@ namespace RosSharp.RosBridgeClient
                     break;
             }
 
+            foreach (GameObject placementButton in PlacementButtons)
+            {
+                placementButton.GetComponent<MeshRenderer>().material = DefaultPlacementButtonMaterial;
+            }
+
 
             Debug.Log(string.Format("Robot intent displayed: {0}, Gaze Selection Published: {1}",
                 RobotIntentDisplayedToggle.IsToggled, GazeSelectionPublishedToggle.IsToggled));
@@ -78,11 +83,6 @@ namespace RosSharp.RosBridgeClient
         {
             CurrentStudyCondition = message.data;
             isMessageReceived = true;
-
-            foreach (GameObject placementButton in PlacementButtons)
-            {
-                placementButton.GetComponent<MeshRenderer>().material = DefaultPlacementButtonMaterial;
-            }
         }
     }
 }
