@@ -16,12 +16,14 @@ namespace RosSharp.RosBridgeClient
         public GameObject RobotIntentDisplayed;
         public GameObject GazeSelectionPublished;
         public Material DefaultPlacementButtonMaterial;
+        public Material DefaultZoneAndBlockMaterial;
 
         private Interactable RobotIntentDisplayedToggle;
         private Interactable GazeSelectionPublishedToggle;
         private GameObject[] PlacementButtons;
+        private GameObject[] ZonesAndBlocks;
         
-
+        // TODO: Get all zones and blocks, add their materials as args, set them when message received
 
         // 1: All, 2: Traffic Light Shown, 3: Eye Gaze Published, 4: None
         private int CurrentStudyCondition = 1;
@@ -32,6 +34,7 @@ namespace RosSharp.RosBridgeClient
             RobotIntentDisplayedToggle = RobotIntentDisplayed.GetComponent<Interactable>();
             GazeSelectionPublishedToggle = GazeSelectionPublished.GetComponent<Interactable>();
             PlacementButtons = GameObject.FindGameObjectsWithTag("PlacementButton");
+            ZonesAndBlocks = GameObject.FindGameObjectsWithTag("HighlightableObject");
 
             isMessageReceived = false;
         }
@@ -69,6 +72,12 @@ namespace RosSharp.RosBridgeClient
             foreach (GameObject placementButton in PlacementButtons)
             {
                 placementButton.GetComponent<MeshRenderer>().material = DefaultPlacementButtonMaterial;
+
+            }
+
+            foreach (GameObject zoneOrBlock in ZonesAndBlocks)
+            {
+                zoneOrBlock.GetComponent<MeshRenderer>().material = DefaultZoneAndBlockMaterial;
             }
 
 
