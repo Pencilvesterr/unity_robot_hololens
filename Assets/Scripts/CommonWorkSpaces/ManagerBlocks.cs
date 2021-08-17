@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using Microsoft.MixedReality.Toolkit.UI;
 using UnityEngine;
@@ -16,23 +17,15 @@ public class ManagerBlocks : MonoBehaviour {
     void Start()
     {
         ToggleStatus = RingVisibilityToggle.GetComponent<Interactable>();
-        BlockRings = new Dictionary<int, GameObject> { 
-            {11, GameObject.Find("Ring 11")},
-            {12, GameObject.Find("Ring 12")},
-            {13, GameObject.Find("Ring 13")},
-            {14, GameObject.Find("Ring 14")},
-            {15, GameObject.Find("Ring 15")},
-            {21, GameObject.Find("Ring 21")},
-            {22, GameObject.Find("Ring 22")},
-            {23, GameObject.Find("Ring 23")},
-            {24, GameObject.Find("Ring 24")},
-            {25, GameObject.Find("Ring 25")},
-            {31, GameObject.Find("Ring 31")},
-            {32, GameObject.Find("Ring 32")},
-            {33, GameObject.Find("Ring 33")},
-            {34, GameObject.Find("Ring 34")},
-            {35, GameObject.Find("Ring 35")}
-        };
+
+        // Find all ring objects and create a dict for each with key being ring number
+        BlockRings = new Dictionary<int, GameObject>();
+        GameObject[] BlockRingsList = GameObject.FindGameObjectsWithTag("ZoneSelectionRing");
+        foreach (GameObject ring in BlockRingsList)
+        {
+            string[] split_name = ring.name.Split(' ');
+            BlockRings.Add(Int32.Parse(split_name[1]), ring);
+        }
 
         ToggleStatus.IsToggled = false;
 
