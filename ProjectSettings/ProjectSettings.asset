@@ -593,9 +593,9 @@ PlayerSettings:
   metroPackageVersion: 1.0.16.0
   metroCertificatePath: Assets\WSATestCertificate.pfx
   metroCertificatePassword: 
-  metroCertificateSubject: DefaultCompany
-  metroCertificateIssuer: DefaultCompany
-  metroCertificateNotAfter: 006c85e97e72d701
+  metroCertificateSubject: MonashUniversity
+  metroCertificateIssuer: MonashUniversity
+  metroCertificateNotAfter: 80344847a9c9d801
   metroApplicationDescription: HoloLens visulazation of work spaces and Panda robot
   wsaImages: {}
   metroTileShortName: TestProject
