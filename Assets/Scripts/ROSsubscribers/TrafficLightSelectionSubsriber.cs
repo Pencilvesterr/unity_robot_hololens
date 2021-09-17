@@ -63,6 +63,7 @@ namespace RosSharp.RosBridgeClient
 
         private void ProcessMessage()
         {   
+            Debug.Log(string.Format("Updating block: {0}, zone: {1}", current_block, current_zone));
             if (current_zone != null && current_block != null)
             {
                 current_zone.GetComponent<MeshRenderer>().material = default_material;

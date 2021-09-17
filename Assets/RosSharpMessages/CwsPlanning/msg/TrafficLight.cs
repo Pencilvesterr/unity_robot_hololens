@@ -14,7 +14,7 @@ namespace RosSharp.RosBridgeClient.MessageTypes.CwsPlanning
     public class TrafficLight : Message
     {
         [JsonIgnore]
-        public const string RosMessageName = "cws_planning/TrafficLight";
+        public const string RosMessageName = "hrca_decision/TrafficLight";
 
         public int block_selected;
         public int block_status;
