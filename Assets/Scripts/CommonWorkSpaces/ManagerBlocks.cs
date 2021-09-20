@@ -9,8 +9,13 @@ public class ManagerBlocks : MonoBehaviour {
 
     public GameObject RingVisibilityToggle;
     private Interactable ToggleStatus;
+    public RosSharp.RosBridgeClient.SelectedBlockPublisher GazeSelectionPublisher;
 
     private Dictionary<int, GameObject> BlockRings;
+    private float GazeSelectedTime;
+    private const float RingVanishSeconds = 5;
+
+    
 
     public int SelectedBlock { get; set; } = -1;
 
@@ -33,8 +38,20 @@ public class ManagerBlocks : MonoBehaviour {
         AllRingsInvisible();
     }
 
+    private void Update()
+    {
+        // Check if enough time has elapsed as to clear gaze selection
+        if (Time.time - GazeSelectedTime > RingVanishSeconds)
+        {
+            GazeSelectedTime = Time.time;
+            GazeSelectionPublisher.PublishSelection(0);
+            AllRingsInvisible();
+        }
+    }
+
     public void SetGazeSelection(int block)
     {
+        GazeSelectedTime = Time.time;
         if (BlockRings.ContainsKey(block))
         { 
             // One has been selected before, so hide that ring
