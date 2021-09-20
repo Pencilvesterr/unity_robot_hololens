@@ -13,7 +13,7 @@ public class ManagerBlocks : MonoBehaviour {
 
     private Dictionary<int, GameObject> BlockRings;
     private float GazeSelectedTime;
-    private const float RingVanishSeconds = 5;
+    public float RingVanishSeconds = 5;
 
     
 
