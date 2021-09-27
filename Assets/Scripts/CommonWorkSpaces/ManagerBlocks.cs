@@ -41,9 +41,10 @@ public class ManagerBlocks : MonoBehaviour {
     private void Update()
     {
         // Check if enough time has elapsed as to clear gaze selection
-        if (Time.time - GazeSelectedTime > RingVanishSeconds)
+        if (Time.time - GazeSelectedTime > RingVanishSeconds && SelectedBlock != -1)
         {
             GazeSelectedTime = Time.time;
+            SelectedBlock = -1;
             GazeSelectionPublisher.PublishSelection(0);
             AllRingsInvisible();
         }
