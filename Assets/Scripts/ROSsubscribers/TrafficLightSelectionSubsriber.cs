@@ -29,27 +29,19 @@ namespace RosSharp.RosBridgeClient
         private GameObject[] highlightable_objects;
         private GameObject current_zone;
         private GameObject current_block;
-
-
         private bool isMessageReceived;
+        private const string HighlightableTag = "HighlightableObject";
+
         protected override void Start()
         {
             base.Start();
-            highlightable_objects = GameObject.FindGameObjectsWithTag("HighlightableObject");
+            highlightable_objects = GameObject.FindGameObjectsWithTag(HighlightableTag);
             audio_source = GetComponent<AudioSource>();
             ToggleStatus = ARRobotIntentButton.GetComponent<Interactable>();
             isMessageReceived = false;
             ToggleStatus.IsToggled = true;
         }
-        protected override void ReceiveMessage(TrafficLight message)
-        {
-            block_selected = message.block_selected;
-            block_status = message.block_status;
-            zone_selected = message.zone_selected;
-            zone_status = message.zone_status;
 
-            isMessageReceived = true;
-        }
         private void Update()
         {
             // TODO: Expand on this, and have so they're all hidden when it's toggled (will need it to trigger a function to reset all colour of zones
@@ -59,8 +51,16 @@ namespace RosSharp.RosBridgeClient
             }
         }
 
+        protected override void ReceiveMessage(TrafficLight message)
+        {
+            block_selected = message.block_selected;
+            block_status = message.block_status;
+            zone_selected = message.zone_selected;
+            zone_status = message.zone_status;
 
-
+            isMessageReceived = true;
+        }
+       
         private void ProcessMessage()
         {   
             Debug.Log(string.Format("Updating block: {0}, zone: {1}", current_block, current_zone));
@@ -80,11 +80,13 @@ namespace RosSharp.RosBridgeClient
                 else if (highlightable_objects[i].name.Equals(zone_selected.ToString()))
                 {
                     current_zone = highlightable_objects[i];
+                    
                 }
             }
 
             // Update their colour based on the message's content
            UpdateColour();
+           ChildObjectsMaterialMatchParent(current_zone);
 
             // Play transition noise
             audio_source.PlayOneShot(transition_sound, 0.7F);
@@ -103,6 +105,7 @@ namespace RosSharp.RosBridgeClient
                 // Reset previous block/zone to their default
                 current_zone.GetComponent<MeshRenderer>().material = default_material;
                 current_block.GetComponent<MeshRenderer>().material = default_material;   
+                ChildObjectsMaterialMatchParent(current_zone);
             }
             else
             {
@@ -123,10 +126,26 @@ namespace RosSharp.RosBridgeClient
             if (zone_status == 1)
             {
                 current_zone.GetComponent<MeshRenderer>().material = red_highlight;
+                ChildObjectsMaterialMatchParent(current_zone);
             }
             else if (zone_status == 2)
             {
                 current_zone.GetComponent<MeshRenderer>().material = yellow_highlight;
+                ChildObjectsMaterialMatchParent(current_zone);
+            }
+        }
+
+        private void ChildObjectsMaterialMatchParent(GameObject parentObject)
+        {
+            Material parentMaterial = parentObject.GetComponent<MeshRenderer>().material;
+            int numOfChildren = parentObject.transform.childCount;
+            for(int i = 0; i < numOfChildren; i++)
+            {
+                GameObject child = parentObject.transform.GetChild(i).gameObject;
+                if (child.tag == HighlightableTag)
+                {
+                    child.GetComponent<Renderer>().material = parentMaterial;
+                } 
             }
         }
     }
